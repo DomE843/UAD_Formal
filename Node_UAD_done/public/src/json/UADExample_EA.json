@@ -1,0 +1,116 @@
+{
+  "class": "go.GraphLinksModel",
+  "nodeDataArray": [{
+      "category": "InitialNode",
+      "size": "50 50",
+      "key": -1,
+      "loc": "-180 70"
+    },
+    {
+      "category": "Action",
+      "text": "Step",
+      "size": "70 35",
+      "key": -6,
+      "loc": "-180 250"
+    },
+    {
+      "category": "parallel",
+      "size": "260 10",
+      "key": -10,
+      "loc": "-172.5 310"
+    },
+    {
+      "category": "DecisionNode",
+      "size": "80 45",
+      "key": -8,
+      "loc": "-250 410"
+    },
+    {
+      "category": "Action",
+      "text": "Step",
+      "size": "70 35",
+      "key": -5,
+      "loc": "-90 410"
+    },
+    {
+      "category": "ActivityFinalNode",
+      "size": "50 50",
+      "key": -2,
+      "loc": "-80 520"
+    },
+    {
+      "category": "FlowFinalNode",
+      "size": "50 50",
+      "key": -3,
+      "loc": "-250 530"
+    },
+    {
+      "category": "MergeNode",
+      "size": "80 45",
+      "key": -9,
+      "loc": "-180 160"
+    },
+    {
+      "category": "behavior",
+      "text": "",
+      "size": "35 70",
+      "key": -13,
+      "loc": "-330 370"
+    }
+  ],
+  "linkDataArray": [{
+      "category": "ControlFlow",
+      "points": [-180, 96, -180, 136.5],
+      "from": -1,
+      "to": -9
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-180, 183.5, -180, 231.5],
+      "from": -9,
+      "to": -6
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-177.6884652654108, 268.4922778767137, -172.5, 294.5, -172.5, 304.5],
+      "from": -6,
+      "to": -10
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-172.5, 315.5, -172.5, 325.5, -237.2437939493629, 393.5403792895005],
+      "from": -10,
+      "to": -8
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-250, 433.5, -250, 504],
+      "from": -8,
+      "to": -3
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-78.55482430074946, 315.02671523523236, -68.55482430074946, 315.02671523523236, -87.75984162571706, 391.50725733131947],
+      "from": -10,
+      "to": -5
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-88.31855516304839, 428.4958932064677, -82.35392939710547, 494.1067766318397],
+      "from": -5,
+      "to": -2
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-289.6530660562278, 410.7771369929114, -429.9811307370362, 413.52734375, -434.9811307370362, 159.52734375, -220.86861322190305, 159.92424221583641],
+      "from": -8,
+      "to": -9
+    },
+    {
+      "category": "CommentFlow",
+      "points": [-295.111803398875, 387.72360679775, -272.0708977792352, 398.9645511103824],
+      "from": -13,
+      "to": -8
+    }
+  ]
+}

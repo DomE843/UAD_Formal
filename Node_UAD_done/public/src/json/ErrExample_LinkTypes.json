@@ -1,0 +1,136 @@
+{
+  "class": "go.GraphLinksModel",
+  "nodeDataArray": [{
+      "category": "InitialNode",
+      "size": "50 50",
+      "key": -1,
+      "loc": "-170 290"
+    },
+    {
+      "category": "Action",
+      "text": "Step",
+      "size": "70 35",
+      "key": -6,
+      "loc": "-70 340"
+    },
+    {
+      "category": "Object",
+      "text": "Object",
+      "size": "70 35",
+      "key": -7,
+      "loc": "-20 410"
+    },
+    {
+      "category": "ActivityFinalNode",
+      "size": "50 50",
+      "key": -2,
+      "loc": "-20 510"
+    },
+    {
+      "category": "connector",
+      "text": "x",
+      "size": "50 50",
+      "key": -4,
+      "loc": "390 290"
+    },
+    {
+      "category": "DecisionNode",
+      "size": "80 45",
+      "key": -8,
+      "loc": "130 340"
+    },
+    {
+      "category": "Action",
+      "text": "Step",
+      "size": "70 35",
+      "key": -9,
+      "loc": "260 290"
+    },
+    {
+      "category": "FlowFinalNode",
+      "size": "50 50",
+      "key": -3,
+      "loc": "130 440"
+    },
+    {
+      "category": "behavior",
+      "text": "asdf asdf",
+      "size": "70 35",
+      "key": -13,
+      "loc": "130 180"
+    }
+  ],
+  "linkDataArray": [{
+      "category": "ControlFlow",
+      "points": [-144, 290, -134, 290, -125, 290, -125, 340, -116, 340, -106, 340],
+      "from": -1,
+      "to": -6
+    },
+    {
+      "category": "ObjectFlow",
+      "points": [-70, 358.5, -70, 368.5, -70, 375.25, -20, 375.25, -20, 382, -20, 392],
+      "from": -6,
+      "to": -7
+    },
+    {
+      "category": "ObjectFlow",
+      "points": [-20, 428, -20, 438, -20, 456, -20, 456, -20, 474, -20, 484],
+      "from": -7,
+      "to": -2
+    },
+    {
+      "category": "connect_flow",
+      "points": [296, 290, 306, 290, 330, 290, 330, 290, 354, 290, 364, 290],
+      "from": -9,
+      "to": -4
+    },
+    {
+      "category": "ControlFlow",
+      "points": [130, 363.5, 130, 373.5, 130, 388.75, 130, 388.75, 130, 404, 130, 414],
+      "from": -8,
+      "to": -3
+    },
+    {
+      "category": "ControlFlow",
+      "points": [171, 340, 181, 340, 197.5, 340, 197.5, 290, 214, 290, 224, 290],
+      "from": -8,
+      "to": -9
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-34, 340, -24, 340, 27.5, 340, 27.5, 340, 79, 340, 89, 340],
+      "from": -6,
+      "to": -8
+    },
+    {
+      "category": "CommentFlow",
+      "points": [130, 197.75, 130, 207.75, 130, 257.125, 130, 257.125, 130, 306.5, 130, 316.5],
+      "from": -13,
+      "to": -8
+    },
+    {
+      "category": "ControlFlow",
+      "points": [89, 340, 79, 340, 52.25, 340, 52.25, 410, 25.5, 410, 15.5, 410],
+      "from": -8,
+      "to": -7
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-144, 290, -134, 290, 42, 290, 42, 290, 214, 290, 224, 290],
+      "from": -1,
+      "to": -9
+    },
+    {
+      "category": "ObjectFlow",
+      "points": [260, 308.5, 260, 318.5, 260, 361.25, 130, 361.25, 130, 404, 130, 414],
+      "from": -9,
+      "to": -3
+    },
+    {
+      "category": "ControlFlow",
+      "points": [-70, 358.5, -70, 368.5, -70, 421.25, -20, 421.25, -20, 474, -20, 484],
+      "from": -6,
+      "to": -2
+    }
+  ]
+}
