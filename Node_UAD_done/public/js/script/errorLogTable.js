@@ -15,7 +15,7 @@ function showLog(id, jsonObj) {
   var img = document.createElement('img');
   img.setAttribute('class', 'LogIcon');
 
-  img.src = '../../src/images/log/warning.jfif';
+  img.src = '../../public/src/images/log/warning.jfif';
   errIcon.appendChild(img);
   
   errID.innerHTML = id;
@@ -41,7 +41,7 @@ function showLog(id, jsonObj) {
 };
 
 function show(idArr) {
-  $.getJSON("../../src/json/errorRules.json", function (data) {
+  $.getJSON("../../public/src/json/errorRules.json", function (data) {
     for (let index = 0; index < idArr.length; index++) {
         showLog(idArr[index], data);
     }

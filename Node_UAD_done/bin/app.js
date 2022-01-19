@@ -1,27 +1,23 @@
-// 引入 express 框架 -> 需 npm 安装
-var express = require('express');
+const express = require('express');
+const router = require('../router/router');
+const bodyParser = require('body-parser');
 
-/**
- * 初始化框架,并将初始化后的函数给予 '当前页面'全局变量 app
- * 也就是说, app 是 express 
- */
-var app = express();
+const app = express();
 
+app.use('../node_modules/', express.static('../node_modules/'));
+app.use('../public/', express.static('../public/'));
+// app.use('/storager/', express.static('./storager/'));
+app.use('../router/', express.static('../router/'));
+app.engine('html', require('express-art-template'));
 
-/* 配置框架环境 S */
-// 设置 public 为静态文件的存放文件夹
-app.use('/public', express.static('public'));
-/* 配置框架环境 E */
+//配置模板引擎和body-parser一定要在app.use(router)挂载路由之前
+//parse application/json
+app.use(bodyParser.json({limit: '50mb'})); //扩展json的传输上限
+//parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
-app.get('/', function(req, res) {
-    res.send('Hello World');
-})
+app.use(router);
 
-var server = app.listen(8081, function() {
-
-    var host = server.address().address
-    var port = server.address().port
-    
-    console.log("Node.JS 服务器已启动，访问地址： http://%s:%s", host, port)
-
-})
+app.listen(3000, ()=> {
+  console.log('server is running...');
+});

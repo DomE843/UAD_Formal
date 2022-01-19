@@ -2,59 +2,11 @@ var reader = new FileReader();
 
 
 function load() {
-  activityDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
-}
-
-//❌not well tested!!!
-function readerOfFile() {
-  // file reading started
-  reader.addEventListener('loadstart', function () {
-    document.querySelector("#file-input-label").style.display = 'none';
+  // activityDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+  const srcJson = "../../../public/src/json/test.json";
+  $.getJSON(srcJson, function (result) {
+    activityDiagram.model = go.Model.fromJson(result);
   });
-
-  // file reading finished successfully
-  reader.addEventListener('load', function (e) {
-    var text = e.target.result;
-    document.querySelector("#contents").innerHTML = text;
-    document.querySelector("#contents").style.display = 'block';
-    document.querySelector("#file-input-label").style.display = 'block';
-  });
-
-  // file reading failed
-  reader.addEventListener('error', function () {
-    alert('Error : Failed to read file');
-  });
-
-  // file read progress 
-  reader.addEventListener('progress', function (e) {
-    if (e.lengthComputable == true) {
-      document.querySelector("#file-progress-percent").innerHTML = Math.floor((e.loaded / e.total) * 100);
-      document.querySelector("#file-progress-percent").style.display = 'block';
-    }
-  });
-
-  return reader;
-}
-
-function loadLocal(files) {
-  /* get 1st file */
-  var all_files = files; // how to get all files ???
-  if (all_files.length == 0) {
-    alert('Error : No file selected');
-    return;
-  }
-  var fp = all_files[0];
-
-  /* set maxSize of a file */
-  var maxFileSize = 20 * 1024 * 1024;
-  if (fp.size > maxFileSize) {
-    alert("The File is too large");
-    return;
-  }
-
-  /* get Reader of file */
-  let fReader = readerOfFile(); //parameters ??
-  fReader.readAsText(fp);
 }
 
 function save() {
@@ -62,39 +14,24 @@ function save() {
   activityDiagram.isModified = false;
 }
 
-/*************************************Print Image **********************************/
-function imgCallback(blob) {
-  var url = window.URL.createObjectURL(blob);
-  var dt = new Date();
-  var filename = dt.toLocaleDateString();
-
-  var a = document.createElement("a");
-  a.style = "display: none";
-  a.href = url;
-  a.download = filename;
-
-  // IE 11
-  if (window.navigator.msSaveBlob !== undefined) {
-    window.navigatoar.msSaveBlob(blob, filename);
-    return;
-  }
-
-  document.body.appendChild(a);
-  requestAnimationFrame(function () {
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+/*************************************Print Image Start **********************************/
+function printImage() {
+  var svg = activityDiagram.makeSvg({
+    scale: 1,
+    // background: "white"  //如果设置，则 背景色区域大小 小于 完整的图区域；
   });
-}
 
-function exportImage() {
-  activityDiagram.startTransaction("Export Image");
-  var blob = activityDiagram.makeImageData({
-    background: "white",
-    returnType: "blob",
-    callback: imgCallback
-  });
-  activityDiagram.commitTransaction("Export Image");
+  var divSvg = document.createElement("div");
+  divSvg.setAttribute("id", "divSvg");
+  divSvg.appendChild(svg);
+  document.body.appendChild(divSvg);
+
+  var svgTag = document.getElementById("divSvg").childNodes[0];
+
+  // 打印PNG的核心函数, ./svgToPng.js
+  pngDownload(svgTag, "ActivitySample");
+
+  document.body.removeChild(divSvg);
 }
 /**********************************Print Image End**********************************/
 
@@ -146,15 +83,6 @@ function clickOperation() {
     darg(drg_a);
   } else {
     drg_a.style.display = 'none';
-  }
-}
-
-function checkAction(nd) {
-  var linksIn = nd.findLinksOutOf();
-  if (linksIn.size > 1) {
-    linksIn.each(function (lk) {
-      lk.isHighlighted = true;
-    });
   }
 }
 

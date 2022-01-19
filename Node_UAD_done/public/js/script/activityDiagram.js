@@ -221,7 +221,7 @@ function diagramInit() {
       )
     ));
   activityDiagram.nodeTemplateMap.add("Object",
-    $$(go.Node, "Auto", setNode(),
+    $$(go.Node, "Auto", setNode(),{isVisible: false},
       $$(go.Panel, "Auto", setPanel(),
         $$(go.Shape, setShape(), {
           fromLinkable: true,
@@ -367,9 +367,12 @@ function diagramInit() {
           var shp = grp.resizeObject;
           if (grp.diagram.undoManager.isUndoingRedoing) return;
           if (grp.isSubGraphExpanded) {
-            shp.width = grp._savedBreadth;
+            shp.width = grp.savedBreadth;
+            shp.height = grp.savedBreadth;
           } else {
-            grp._savedBreadth = shp.width;
+            // what does 'savedBreadth' means ???
+            // how to get height data
+            grp.savedBreadth = shp.width;
             shp.width = NaN;
           }
           folderLinks(grp);
@@ -461,10 +464,10 @@ function diagramInit() {
   //         var shp = grp.resizeObject;
   //         if (grp.diagram.undoManager.isUndoingRedoing) return;
   //         if (grp.isSubGraphExpanded) {
-  //           shp.width = grp._savedBreadth;
+  //           shp.width = grp.savedBreadth;
   //         } else {
   //           // what if I get a Height? 
-  //           grp._savedBreadth = shp.width;  
+  //           grp.savedBreadth = shp.width;  
   //           shp.width = NaN;
   //         }
   //         folderLinks(grp);
@@ -524,7 +527,7 @@ function diagramInit() {
   makeLinkTemplate("ObjectFlow",[0,0],"OpenTriangle");
   makeLinkTemplate("CommentFlow",[3,2],"Circle");
 
-  load();
+  // load();
 
   // Get a copy of activityDiagram for function defining.
   // myDiagram = activityDiagram;

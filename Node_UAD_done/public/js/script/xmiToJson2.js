@@ -1,8 +1,8 @@
 const xml2js = require('xml2js');
 const fs = require('fs');
-const fstr = fs.readFileSync("../../src/json/xmiToJson.json");
+const fstr = fs.readFileSync("../../public/src/json/xmiToJson.json");
 const XMIJson = JSON.parse(fstr);
-const XMIPath = "../../src/xmi/a.xmi";
+const XMIPath = "../../public/src/xmi/a.xmi";
 
 var XMIDiagrams;
 
@@ -73,5 +73,5 @@ function addNodesToArray(object, nodesObj) {
 }
 
 function writeJson(obj) {
-  var w = fs.writeFileSync("../../src/output/b.json", JSON.stringify(obj));
+  var w = fs.writeFileSync("../../public/src/output/b.json", JSON.stringify(obj));
 }
