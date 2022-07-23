@@ -1,0 +1,10 @@
+{ "class": "go.GraphLinksModel",
+"nodeDataArray": [ 
+{"category":"InitialNode", "size":"50 50", "key":-1, "loc":"-160 290"}
+],
+"linkDataArray": [ 
+{"category":"ObjectFlow", "points":[-125.37079751294777,455.7405465850237,24.5,523.8636363636364], "from":-6, "to":-7},
+{"category":"ObjectFlow", "points":[24.5,540,-134,540], "from":-7, "to":-2},
+{"category":"connect_flow", "points":[266,290,364,290], "from":-9, "to":-4}
+]
+}

@@ -1,0 +1,90 @@
+{
+  "rules": [{
+    "id": 1,
+    "description": "Lack of \"Start\" node in the diagram"
+  }, {
+    "id": 2,
+    "description": "Lack of \"End\" node in the dagram"
+  }, {
+    "id": 3,
+    "description": "Multiple \"Control\" flow comes into \"Action\""
+  }, {
+    "id": 4,
+    "description": "Multiple \"Control\" flows come into \"Decision\""
+  }, {
+    "id": 5,
+    "description": "Incorrect format of Guard, try it with '[]'"
+  }, {
+    "id": 6,
+    "description": "Lack of Guard on \"Decision\" branch"
+  }, {
+    "id": 7,
+    "description": "Multiple \"Control\" flows go out from \"Action\""
+  }, {
+    "id": 8,
+    "description": "X_Odd \"Parallel\" node"
+  }, {
+    "id": 9,
+    "description": "The type of Incoming Flows does not match the type of Outgoing Flows"
+  }, {
+    "id": 10,
+    "description": "The Incoming \"Object\"   of \"Join\" node should combine together."
+  }, {
+    "id": 11,
+    "description": "X_Diagram should have less \"Start\" node "
+  }, {
+    "id": 12,
+    "description": "The Node does not have any Flows"
+  }, {
+    "id": 13,
+    "description": "X_The \"Join\" node has multiple Outgoing Flows."
+  }, {
+    "id": 14,
+    "description": "The title of \"Behavior\" is not well formatted "
+  }, {
+    "id": 15,
+    "description": "The Node does not have any Incoming Flows "
+  }, {
+    "id": 16,
+    "description": "The node does not have any Outgoing Flows "
+  }, {
+    "id": 17,
+    "description": "The node has too many Incoming Flows "
+  }, {
+    "id": 18,
+    "description": "Invalid string property (This needs to Specify )"
+  }, {
+    "id": 19,
+    "description": "\"Object\" node has Non-Object flows coming into"
+  }, {
+    "id": 20,
+    "description": "\"Object\" node has Non-Object flows going out"
+  }, {
+    "id": 21,
+    "description": "\"Start\" node has multiple outgoing flows"
+  }, {
+    "id": 22,
+    "description": "\"End\"-like node has multiple incoming flows"
+  }, {
+    "id": 23,
+    "description": "\"Decision\" node does not have an 'Input Behavior'"
+  }, {
+    "id": 24,
+    "description": "Outgoing flows of \"Decision\" node are not unified."
+  }, {
+    "id": 25,
+    "description": "\"Behavior\" has wrong type of Link going out. "
+  }, {
+    "id": 26,
+    "description": "Invalid Input flows comming into."
+  }, {
+    "id": 27,
+    "description": "\"Parallel\" node has either one InputFlow or one OutgoingFlow."
+  }, {
+    "id": 28,
+    "description": "The node has too many Outgoing flows."
+  }, {
+    "id": 29,
+    "description": "Group node has 0 members."
+  }]
+}

@@ -1,0 +1,224 @@
+html, body{
+  height: 99%;
+  /* margin: 0px;
+  padding: 3px 0px; */
+}
+
+/*  其他提示、弹窗类  S   */
+.disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
+}
+
+/*  其他提示、弹窗类  E   */
+
+
+/*  顶部菜单栏 S  */
+/* navigation bar */
+
+/* tool bar */
+
+/*  顶部菜单栏 S  */
+
+
+/*  主要作图区： PaletteDiv， DiagramDiv， RightMenuDiv  */
+.aDmainDiagram {
+  width: 100%;
+  height: 760px;
+}
+
+
+/*  左侧画板工具 S  */
+#UmlFunctionDiv {
+  height: 758px;
+}
+.subNav {
+  text-align: center;
+  /* margin-left: 20px; */
+}
+.subNavBox ul li {
+  height: 22px;
+}
+.subNavBox ul li a img {
+  width: 18px;
+  transform: scale(1.5);
+}
+.navContent {
+  padding-bottom: 10px;
+}
+/*  左侧画板工具 E  */
+
+
+/*  画板样式 S */
+#activityDiagramDiv {
+  flex-grow: 1;
+  position: relative;
+  z-index: 1;
+  height: 758px;
+  border: solid 1px black;
+}
+
+/********************** Activity Overview S******************/
+#myButton{
+  display: none;
+  z-index: 990;
+}
+.myOverviewDiv {
+  z-index: 990;
+}
+
+
+/********************** Activity Overview E******************/
+
+/********************** Activity Inspector S******************/
+#activityInspectorDiv {
+  position: absolute;
+  z-index: 990;
+  left: 140px;
+  bottom: 18px;
+  width: 220px;
+  overflow-y: scroll;
+}
+
+.actInspector {
+  display: inline-block;
+  font: bold 14px helvetica, sans-serif;
+  background-color: #212121;
+  color: #F5F5F5;
+  cursor: default;
+}
+
+.actInspector table {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.actInspector td,
+th {
+  padding: 2px;
+}
+
+.actInspector input {
+  background-color: #424242;
+  color: #F5F5F5;
+  font: bold 12px helvetica, sans-serif;
+  border: 0px;
+  padding: 2px;
+}
+
+.actInspector input:disabled {
+  background-color: #BDBDBD;
+  color: #616161;
+}
+
+.actInspector select {
+  background-color: #424242;
+}
+/********************** Activity Inspector E******************/
+
+/*  画板样式 E */
+
+/*  右侧菜单栏 S */
+#UmlRightDiv {
+  display: none;
+}
+
+.rightMenu .cueText {
+  top: 87px;
+  margin-bottom: 3px;
+}
+
+.adErrorsCount {
+  font: bold 12px sans-serif;
+  color: red;
+}
+
+.rightMenuInner {
+  width: 201px;
+  height: 700px;
+  margin-bottom: 2px;
+}
+
+#rightMenuDetail {
+  position: absolute;
+  top: 432px;
+  right: 7px;
+  width: 199px;
+  height: 413px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  z-index: 90;
+}
+
+#rightMenuDetail .detail {
+  width: 195px;
+  height: 24px;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 13px;
+  text-align: center;
+  padding-top: 3px;
+  z-index: 98;
+  background-color: #000000;
+}
+
+/* 错误日志输出记录 */
+#ADErrorDetails {
+  width: 198px;
+  height: 370px;
+  overflow-x: hidden;
+}
+
+#ADErrorDetails>li {
+  padding-left: 6px;
+  height: min-content;
+  font: 12px consolas;
+  background-color: rgb(225, 225, 225);
+  margin: 1px 0px;
+}
+
+#ADErrorDetails>li a {
+  text-decoration: none;
+  color: black;
+}
+
+#ADErrorDetails>li>img {
+  height: 10px;
+  width: 10px;
+}
+
+/*  右侧菜单栏 E */
+
+/*  底部Footer样式 S  */
+.aDFooter {
+  width: 99%;
+  height: 140px;
+  margin: 1px;
+}
+
+.aDFooter>.aDdiv_item {
+  height: 140px;
+  width: 99%;
+  margin-bottom: 8px;
+}
+
+.aDdiv_item>.aDdivHeader {
+  height: 20px;
+  width: inherit;
+  background-image: linear-gradient(gray, white);
+}
+
+.aDdiv_item>.aDdivHeader>a:hover {
+  background: lightslategray;
+  color: black;
+  font-weight: 500;
+}
+
+.aDdiv_item>.aDdivContent {
+  width: 99.7%;
+  height: 120px;
+  padding: 3px 2px;
+}
+
+/*  底部Footer样式 E  */
