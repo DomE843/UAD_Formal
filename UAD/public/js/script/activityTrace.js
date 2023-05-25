@@ -1,155 +1,113 @@
-/*
-  @NOTE:  The diagram trace is from one of Initialnodes to one of other FinalNodes
-  and the trace has conditions such as :
-    1. Loop
-    2. Bad ends( not finished by FinalNodes )
-    3. Bad starts(vnot finished by InitialNodes )
-*/
+/**
+ * This file mainly copes with paths in UML diagrams, and it is origninally de-
+ * signed for Activity diagram to find:
+ *  1). normal paths between given types of nodes (By default, between Initial
+ *      Nodes and Final Nodes); 
+ *  2). loops in this entire diagram.
+ * Besides, getting the shortest path is also enabled.
+ */
+var normPaths = new go.List();
+var loopPaths = new go.List();
 
-// A collection of all of the paths between a pair of nodes, a List of Lists of Nodes
-var paths = null;
-var nodesOnPathList = new Array();
-var loopPathList = new go.List();
+function findPathsBetweenTypes(bLst, eLst) {
+  bLst.iterator.each(begin => {
 
-function subDiagramTrace() {
-  var bLst = new go.List();
-  var eLst = new go.List();
-
-  /*  Begin/End node may has many ones; */
-  getBegins(bLst);
-  getEnds(eLst);
-
-  cleanSubDiagramTrace();
-  pathForTwoList(bLst, eLst);
-}
-
-function subDiagramLoop() {
-  var bLst = new go.List();
-  var eLst = new go.List();
-
-  /*  Begin/End node may has many ones; */
-  getBegins(bLst);
-  getEnds(eLst);
-
-  cleanSubDiagramTrace();
-  subDiagLoopForLists(bLst, eLst);
-}
-
-function getBegins(list) {
-  let begin = mySubDiagram.findNodesByExample({
-    category: NodeCategories[0]
-  });
-  list = new go.List(begin);
-  console.log("Iterator to go.List for begin :" + list.length);
-}
-
-function getEnds(list) {
-  mySubDiagram.nodes.iterator.each(nd => {
-    const cat = nd.category;
-    if (cat === NodeCategories[1] || cat === NodeCategories[2]) {
-      list.push(nd);
+    for (let i = 0; i < eLst.length; ++i) {
+      listPaths(begin, eLst.get(i));
     }
   });
-  console.log("Push to go.List for end :" + list.length);
 }
 
-function cleanSubDiagramTrace() {
-  /*  Cleaning at first */
-  popDiv('ADdiv_trace');
-  $("#activityDiagramPath").find("option").remove();
-
-  paths = null;
-  nodesOnPathList.length = 0;
-  loopPathList.clear();
-}
-
-function subDiagLoopForLists(bLst, eLst) {
+function findLoopsBetweenTypes(bLst, eLst) {
   bLst.iterator.each(begin => {
-    setPathsDistance(begin);
 
     for (let i = 0; i < eLst.length; ++i) {
       listLoop(begin, eLst.get(i));
-
-      /*  Set '.distance' of each Node to 0 in case that 
-          node has different distance in different paths;  */
-      // changeNodeDistance(0);
     }
   });
 }
 
-// Have each node show how far it is from the BEGIN node.
-// This sets the "distance" property on each node.data.
-function setPathsDistance(begin) {
-  // compute and remember the distance of each node from the BEGIN node
-  degree = findDistances(begin);
-
-  // show the distance on each node
-  var it = degree.iterator;
-  while (it.next()) {
-    var n = it.key;
-    var deg = it.value;
-    mySubDiagram.model.setDataProperty(n.data, "distance", deg);
-    // set flag of isTraversed = false. If it is true, the path ends;
-  }
-}
-
-// List all paths from BEGIN to END
+/********************  Show all paths results --- Start  ********************/
 function listLoop(begin, end) {
-  collectAllPaths(begin, end, nodesOnPathList);
+  collectAllPaths(begin, end, normPaths);
 
-  const Global_sel = document.getElementById("activityDiagramPath");
-  Global_sel.innerHTML = "";
+  const pathsDiv = document.getElementById(pathsDivId);
+  pathsDiv.innerHTML = "";
 
   /*  Simplify the Loops  */
-  loopsSimplify(loopPathList);
+  loopsSimplify(loopPaths);
 
-  loopPathList.each(function (p) {
+  loopPaths.each(function (p) {
     var opt = document.createElement("option");
-    opt.text = pathToString(p);
-    Global_sel.add(opt, null);
+    opt.text = printPath(p);
+    pathsDiv.add(opt, null);
   });
 
-  Global_sel.onchange = highlightSelectedPath;
+  pathsDiv.onchange = () => {
+    highlightSelectedPath(loopPaths);
+  };
 }
 
-// List all paths from BEGIN to END
-function listPathsOption(begin, end, list) {
-  collectAllPaths(begin, end, list);
-  console.log(list.length + " Paths collected");
+function listPaths(begin, end) {
+  collectAllPaths(begin, end, normPaths);
 
-  const Global_sel = document.getElementById("activityDiagramPath");
-  Global_sel.innerHTML = ""; // clear out any old Option elements
-  nodesOnPathList.iterator.each(function (p) {
+  const pathsDiv = document.getElementById(pathsDivId);
+  pathsDiv.innerHTML = ""; 
+  normPaths.iterator.each(function (p) {
     var opt = document.createElement("option");
-    opt.text = pathToString(p);
+    opt.text = printPath(p);
 
-    Global_sel.add(opt, null);
+    pathsDiv.add(opt, null);
   });
-  Global_sel.onchange = highlightSelectedPath;
+  pathsDiv.onchange = () => {
+    highlightSelectedPath(normPaths);
+  };
+}
+/********************  Show all paths results --- End  ********************/
+
+function collectAllPaths(begin, end, totalPaths) {
+  var visited = new go.List();
+
+  function findPathsByLinks(source, end) {
+    source.findNodesOutOf().each(function (n) {
+      if (n === source) return; 
+      if (n === end) {
+        var path = visited.copy();
+        path.add(n); 
+        totalPaths.push(path);
+      } else if (!visited.has(n)) {
+        visited.push(n); 
+        findPathsByLinks(n, end);
+        visited.pop();
+      } else {
+        var loop = visited.copy();
+        loop.add(n);
+        loopPaths.add(loop);
+      }
+    });
+  }
+
+  visited.add(begin); 
+  findPathsByLinks(begin, end);
 }
 
-// Return a string representation of a path for humans to read.
-function pathToString(path) {
-  var s = 'Length：' + path.length + ' | Path：';
+function printPath(path) {
+  var s = 'Size：' + path.length + ' | Sequence: ';
   for (var i = 0; i < path.length; i++) {
-    if (i > 0) s += " -> ";
+    if (i > 0) s += ", ";
     s += path.get(i).data.text;
   }
   return s;
 }
-// This is only used for listing all paths for the selection onchange event.
 
-// When the selected item changes in the Selection element,
-// highlight the corresponding path of nodes.
-function highlightSelectedPath() {
-  const Global_sel = document.getElementById("activityDiagramPath");
-  if (Global_sel.selectedIndex < 0) {
-    Global_sel.selectedIndex = 0;
+function highlightSelectedPath(paths) {
+  const pathsDiv = document.getElementById(pathsDivId);
+  if (pathsDiv.selectedIndex < 0) {
+    pathsDiv.selectedIndex = 0;
   }
-  highlightPath(loopPathList.elt(Global_sel.selectedIndex));
+  highlightPath(paths.elt(pathsDiv.selectedIndex));
 }
 
-// Highlight a particular path, a List of Nodes.
 function highlightPath(path) {
   mySubDiagram.clearHighlighteds();
   for (var i = 0; i < path.count - 1; i++) {
@@ -160,151 +118,6 @@ function highlightPath(path) {
     });
   }
 }
-
-
-// There are three bits of functionality here:
-// 1: findDistances(Node) computes the distance of each Node from the given Node.
-//    This function is used by setPathsDistance to update the model data.
-// 2: findShortestPath(Node, Node) finds a shortest path from one Node to another.
-//    This uses findDistances.  This is used by highlightShortestPath.
-// 3: collectAllPaths(Node, Node) produces a collection of all paths from one Node to another.
-//    This is used by listPathsOption.  The result is remembered in a global variable
-//    which is used by highlightSelectedPath.  This does not depend on findDistances.
-
-// Returns a Map of Nodes with distance values from the given source Node.
-// Assumes all links are directional.
-function findDistances(source) {
-  var diagram = source.diagram;
-  var degree = new go.Map( /*go.Node, "number"*/ );
-
-  var nit = diagram.nodes;
-  while (nit.next()) {
-    var n = nit.value;
-    degree.set(n, Infinity);
-  }
-  // the source node starts with distance 0
-  degree.set(source, 0);
-  // keep track of nodes for which we have set a non-Infinity distance,
-  // but which we have not yet finished examining
-  var seen = new go.Set( /*go.Node*/ );
-  seen.add(source);
-
-  // keep track of nodes we have finished examining;
-  // this avoids unnecessary traversals and helps keep the SEEN collection small
-  var finished = new go.Set( /*go.Node*/ );
-  while (seen.count > 0) {
-    // look at the unfinished node with the shortest distance so far
-    var clstNode = getClosestNode(seen, degree);
-    var leastdist = degree.get(clstNode);
-
-    // by the end of this loop we will have finished examining this clstNode node
-    seen.delete(clstNode);
-    finished.add(clstNode);
-    // look at all Links connected with this node
-    var it = clstNode.findLinksOutOf();
-
-    while (it.next()) {
-      var link = it.value;
-      var neighbor = link.getOtherNode(clstNode);
-      // skip nodes that we have finished
-      if (finished.has(neighbor)) continue;
-      var neighbordist = degree.get(neighbor);
-      // assume "distance" along a link is unitary, but could be any non-negative number.
-      var deg = leastdist + 1; //Math.sqrt(clstNode.location.distanceSquaredPoint(neighbor.location));
-      if (deg < neighbordist) {
-        // if haven't seen that node before, add it to the SEEN collection
-        if (neighbordist === Infinity) {
-          seen.add(neighbor);
-        }
-        // record the new best distance so far to that node
-        degree.set(neighbor, deg);
-      } else if (deg == leastdist - 1) {
-        custAlert("Equal distance of neighbor minus");
-      } else if (deg == leastdist) {
-        custAlert("Equal distance of neighbor");
-      }
-    }
-  }
-
-  return degree;
-}
-
-// This helper function finds a Node in the given collection that has the smallest distance.
-function getClosestNode(nodesOnPathList, degree) {
-  var bestdist = Infinity;
-  var bestnode = null;
-
-  var it = nodesOnPathList.iterator;
-  while (it.next()) {
-    var n = it.value;
-    var deg = degree.get(n);
-    if (deg < bestdist) {
-      bestdist = deg;
-      bestnode = n;
-    }
-  }
-
-  return bestnode;
-}
-
-// Find a path that is shortest from the BEGIN node to the END node.
-// (There might be more than one, and there might be none.)
-function findShortestPath(begin, end) {
-  //   // compute and remember the distance of each node from the BEGIN node
-    degree = findDistances(begin);
-
-    // now find a path from END to BEGIN, always choosing the adjacent Node with the lowest distance
-    var path = new go.List();
-    path.add(end);
-    while (end !== null) {
-      var next = getClosestNode(end.findNodesInto(), degree);
-      if (next !== null) {
-        if (degree.get(next) < degree.get(end)) {
-          path.add(next); // making progress towards the beginning
-        } else {
-          next = null; // nothing better found -- stop looking
-        }
-      }
-      end = next;
-    }
-    // reverse the list to start at the node closest to BEGIN that is on the path to END
-    // NOTE: if there's no path from BEGIN to END, the first node won't be BEGIN!
-    path.reverse();
-    return path;
-}
-
-// Recursively walk the graph starting from the BEGIN node;
-// when reaching the END node remember the list of nodes along the current path.
-// Finally return the collection of paths, which may be empty.
-// This assumes all links are directional.
-function collectAllPaths(begin, end, nodesOnPathList) {
-  var nodeList = new go.List();   
-
-  function findPathsByLinks(source, end) {
-    source.findNodesOutOf().each(function (n) {
-      if (n === source) return; // ignore reflexive links
-      if (n === end) { // success
-        var path = nodeList.copy();
-        path.add(end); // finish the path at the end node
-        nodesOnPathList.push(path); // remember the whole path
-      } else if (!nodeList.has(n)) { // inefficient way to check having visited
-        nodeList.add(n); // remember that we've been here for this path (but not forever)
-        findPathsByLinks(n, end);
-        nodeList.removeAt(nodeList.count - 1);
-      } else {
-      // if (n === end && nodeList.has(n)) {
-        var loop = nodeList.copy();
-        loop.add(n);
-        loopPathList.add(loop);
-      }
-    });
-  }
-
-  nodeList.add(begin); // start the path at the begin node
-  findPathsByLinks(begin, end);
-  // return nodesOnPathList;
-}
-
 
 /*
 @Function:  Extract Loop from the Global path from BeginNode
@@ -329,7 +142,6 @@ function loopsSimplify(glst) {
   var delListIndex = new Set();
 
   /*  2. 找出重复的Loop路径在list中的位置  */
-  ///@NOTE: here "i < Math.floor(len / 2)" is SUPPOSED, inaccurately Stop this Loop
   for (var i = 0; i < Math.floor(len / 2); i++) {
     for (var j = i + 1; j < len; j++) {
       var base = glst.get(i);
@@ -361,7 +173,7 @@ function removeFromLists(glst, array) {
   heapSort(array);
 
   for (let i = 0; i < array.length; i++) {
-    glst.removeAt(array[i] - i); // (<go.List>gLst的长度会动态变化)
+    glst.removeAt(array[i] - i);
   }
 }
 
@@ -371,22 +183,7 @@ function removeFromLists(glst, array) {
 function isListsHaveSame(lista, listb) {
   var len = lista.length;
 
-  // len--; // list最后一个元素与第一个元素相同，舍去比较
   var s = 0;
-  /// WARN: 'i - j < len' is NOT a good termination
-  // for (var i = 0, j = 0; i - j < len;) {
-  //   const x = lista.get(i).key;
-  //   const y = listb.get(j).key;
-  //   if (x == y) {
-  //     s++;
-  //     j++;
-  //     j %= len;
-  //     console.log(i + "|" + j);
-  //   }
-  //   i++;
-  //   i %= len;
-  // }
-  /// WARN: this is too much Time-Costing!!! To be optimized
   lista.each(function (la) {
     if (listb.has(la)) {
       s++;
@@ -394,33 +191,6 @@ function isListsHaveSame(lista, listb) {
   });
 
   return (s == len ? true : false);
-}
-
-function isLoopConditional(loop) {
-  loop.each(nd => {
-    // check Link between Loop Nodes only;
-  });
-
-  return 0;
-}
-
-function loopCheck(loop) {
-  const ndCat = loop.first().category;
-  var x = errorPairObj(x.key, 0);
-
-  if (ndCat == NodeCategories[7]) {        // MergeNode
-    x.rule = isLoopConditional(loop);
-    /// return safe loop for LoopsList to delete
-  } else if (ndCat == NodeCategories[9]) { // JoinNode
-    x.rule = 12;
-  }
-  addErrorItem(x, basicErrors);
-}
-
-function loopsChecking(loops) {
-  loops.forEach(loop => {
-    loopCheck(loop);    
-  });
 }
 
 /*************************** Heap Sort Algorithm - S ************************/
@@ -441,7 +211,7 @@ function heapShiftDown(arr, i, len) {
       j++;
     }
 
-    if (tmp < arr[j]) { // if father node LT child node
+    if (tmp < arr[j]) {
       swapInArray(arr, i, j);
       i = j;
     } else {
@@ -459,8 +229,97 @@ function heapSort(arr) {
   }
 
   for (let j = Math.floor(len - 1); j > 0; j--) {
-    swapInArray(arr, 0, j); // swap root with last node;
-    heapShiftDown(arr, 0, j); // j means that The comparison continues until the very last node
+    swapInArray(arr, 0, j); heapShiftDown(arr, 0, j);
   }
 }
 /*************************** Heap Sort Algorithm - E ************************/
+
+
+/********************  Find shortest path --- Start  ********************/
+function findDistances(source) {
+  var diagram = source.diagram;
+  var degree = new go.Map( /*go.Node, "number"*/);
+
+  var nit = diagram.nodes;
+  while (nit.next()) {
+    var n = nit.value;
+    degree.set(n, Infinity);
+  }
+  degree.set(source, 0);
+  var seen = new go.Set( /*go.Node*/);
+  seen.add(source);
+
+  var finished = new go.Set( /*go.Node*/);
+  while (seen.count > 0) {
+    var clstNode = getClosestNode(seen, degree);
+    var leastdist = degree.get(clstNode);
+
+    seen.delete(clstNode);
+    finished.add(clstNode);
+    var it = clstNode.findLinksOutOf();
+
+    while (it.next()) {
+      var link = it.value;
+      var neighbor = link.getOtherNode(clstNode);
+      if (finished.has(neighbor)) continue;
+      var neighbordist = degree.get(neighbor);
+      var deg = leastdist + 1; if (deg < neighbordist) {
+        if (neighbordist === Infinity) {
+          seen.add(neighbor);
+        }
+        degree.set(neighbor, deg);
+      }
+    }
+  }
+
+  return degree;
+}
+
+function setPathsDistance(begin) {
+  degree = findDistances(begin);
+
+  var it = degree.iterator;
+  while (it.next()) {
+    var n = it.key;
+    var deg = it.value;
+    mySubDiagram.model.setDataProperty(n.data, "distance", deg);
+  }
+}
+
+function getClosestNode(normPaths, degree) {
+  var bestdist = Infinity;
+  var bestnode = null;
+
+  var it = normPaths.iterator;
+  while (it.next()) {
+    var n = it.value;
+    var deg = degree.get(n);
+    if (deg < bestdist) {
+      bestdist = deg;
+      bestnode = n;
+    }
+  }
+
+  return bestnode;
+}
+
+function findShortestPath(begin, end) {
+  let degree = findDistances(begin);
+
+  var path = new go.List();
+  path.add(end);
+  while (end !== null) {
+    var next = getClosestNode(end.findNodesInto(), degree);
+    if (next !== null) {
+      if (degree.get(next) < degree.get(end)) {
+        path.add(next);
+      } else {
+        next = null;
+      }
+    }
+    end = next;
+  }
+  path.reverse();
+  return path;
+}
+/********************  Find shortest path --- End  ********************/

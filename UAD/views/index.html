@@ -8,7 +8,7 @@
   <script type="text/javascript" src="../public/js/lib/DataInspector.js"></script>
 
   <script type="text/javascript" src="../public/js/script/activityDeclaration.js"></script>
-  <script type="text/javascript" src="../public/js/script/RoundedRectangles.js"></script>
+  <script type="text/javascript" src="../public/js/script/FigureExt.js"></script>
   <script type="text/javascript" src="../public/js/script/activityToolBar.js"></script>
   <script type="text/javascript" src="../public/js/script/activityDiagramFunctions.js"></script>
   <script type="text/javascript" src="../public/js/script/activityContextMenu.js"></script>
@@ -133,18 +133,18 @@
 
     <div id="toolBar2">
       <input type="file" id="importFile" style="display: none;" onchange="actUploadJson(this)" />
-      <div class="toolBarIcon"> <img src="../../../public/images/toolBarIcon/openFile.png" onclick="actImportJsonFile()"
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/openFile.png" onclick="actImportJsonFile()"
           title="Import"> </div>
-      <div class="toolBarIcon"> <img src="../../../public/images/toolBarIcon/save.png" onclick="actExportJsonFile()"
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/save.png" onclick="actExportJsonFile()"
           title="Export"> </div>
       <!-- <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/zoomIn.png" title="Zoom In"> </div>
       <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/zoomOut.png" title="Zoom Out"> </div> -->
     </div>
 
     <div id="toolBar3">
-      <div class="toolBarIcon"> <img src="../../../public/images/toolBarIcon/panorama.png"
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/panorama.png"
           onclick="activityDiagramZoomToFit()" title="Zoom to Fit"> </div>
-      <div class="toolBarIcon"> <img src="../../../public/images/toolBarIcon/printscreen.png" onclick="printscreen()"
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/printscreen.png" onclick="printscreen()"
           title="Printscreen"> </div>
     </div>
   </div>
@@ -152,14 +152,14 @@
   <!-- 主要作图区---tgf -->
   <div class="aDmainDiagram" style="width: 100%; display: flex; justify-content: space-between;">
     <div id="recoverButton">
-      <a><img src="../public/images/Icon_/expand_white.png" class="recover" /></a>
+      <a><img src="../public/images/icon/expand_white.png" class="recover" /></a>
     </div>
     <!-- 左侧工具栏 -->
     <div id="UmlFunctionDiv">
       <div id="uml_box_palette">
         <div id="UmlFunctionsList">
           <div class="cueText">Tool Box
-            <a onclick=""><img src="../public/images/Icon_/fold_white.png" class="delete" /></a>
+            <a onclick=""><img src="../public/images/icon/fold_white.png" class="delete" /></a>
           </div>
           <div class="subNavBox">
             <div class="subNav currentDd currentDt">
@@ -231,13 +231,13 @@
     <button id="myButton" onclick="overviewToggle()">Map</button>
     <div id="activityInspectorDiv" class="actInspector" style="display: none;"></div>
     <!--gojs画板-->
-    <div id="activityDiagramDiv" style="background-color:white"></div>
+    <div id="activityDiagramDiv" style="background-color: whitesmoke"></div>
 
     <!-- 右侧菜单栏 Start -->
     <div class="rightMenu" id="UmlRightDiv">
       <div class="rightMenuInner">
         <div id="rightMenuCloseButton">
-          <a onclick="viewToggle('UmlRightDiv')"><img src="../public/images/Icon_/close_white.gif" class="recover" /></a>
+          <a onclick="viewToggle('UmlRightDiv')"><img src="../public/images/icon/close_white.gif" class="recover" /></a>
         </div>
         <div class="cueText">Activity Analysis</div>
         <div class="TreeWrap">
@@ -304,7 +304,7 @@
   <!-- 服务端读文件框 End -->
 
   <!-- Activity Footer -->
-  <div class="aDFooter" style="display: none;">
+  <div class="aDFooter" style="display: block;">
     <div id="ADdiv_json" class="aDdiv_item" style="display: none;">
       <div class="aDdivHeader">
         <a href="javascript:void(0)" onclick="closeDiv('ADdiv_json')" title="Click to Close"><span>Json
@@ -318,7 +318,7 @@
             </textarea>
     </div>
 
-    <div id="ADdiv_trace" class="aDdiv_item" style="display: none;">
+    <div id="ADdiv_trace" class="aDdiv_item" style="display: block;">
       <div class="aDdivHeader">
         <a href="javascript:void(0)" onclick="closeDiv('ADdiv_trace')" title="Click to Close"><span>Diagram
             Trace</span></a>

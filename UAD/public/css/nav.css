@@ -248,7 +248,7 @@ ul {margin: 0;padding: 0}
   color: #545454;
   line-height: 17px;
   padding-left: 18px;
-  background: url(../images/Icon_/expand_white.png) no-repeat;
+  background: url(../images/icon/expand_white.png) no-repeat;
   background-color: #f9f9f9;
   background-size: 9px;
   background-position: 3% 50%;
@@ -262,7 +262,7 @@ ul {margin: 0;padding: 0}
   background-color: #a8a8a8;
 }
 .currentDt {
-  background-image:url(../images/Icon_/fold_white.png);
+  background-image:url(../images/icon/fold_white.png);
   background-size: 9px;
   background-position:3% 50%;
 }

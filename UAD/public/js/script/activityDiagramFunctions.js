@@ -201,7 +201,7 @@ function makeLinkTemplate(strokeArray, fillColor, toArrowShape) {
         isPanelMain: true,
         strokeDashArray: strokeArray
       }, new go.Binding("stroke", "isHighlighted", function (h) {
-        return h ? "red" : blackPure;
+        return h ? "red" : "black";
       })
       .ofObject(),
       new go.Binding("strokeWidth", "isHighlighted", function (h) {
@@ -224,7 +224,7 @@ function makeLinkTemplate(strokeArray, fillColor, toArrowShape) {
         fromLinkable: false,
         toLinkable: false
       }),
-      $$(go.TextBlock, setText(), {
+      $$(go.TextBlock, " ", setText(), {
         name: "LABEL"
       })
     ));
@@ -241,20 +241,19 @@ function addLinkTemplates(diagram, linkTemplateArray) {
 function setShape() {
   return [{
       cursor: "pointer",
-      stroke: blackPure,
+      stroke: "black",
       strokeWidth: 2,
-      fill: defaultPure,
+      fill: "white",
       portId: "",
       name: "SHAPE",
       minSize: new go.Size(10, 10),
       maxSize: new go.Size(400, 400)
     },
-    new go.Binding("fill"),
+    // new go.Binding("fill"),
     new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
     new go.Binding("stroke", "isHighlighted", function (h) {
-      return h ? "red" : blackPure;
-    })
-    .ofObject()
+      return h ? "red" : "black";
+    }).ofObject()
   ];
 }
 
@@ -312,29 +311,6 @@ function setText() {
   ];
 }
 
-/*  Customize a Frament shape */
-go.Shape.defineFigureGenerator('FunctionBar', function(shape, w, h) {
-  var p1 = 5;
-  if (shape !== null) {
-      var param1 = shape.parameter1;
-      if (!isNaN(param1) && param1 >= 0) p1 = param1; // can't be negative or NaN
-  }
-  p1 = Math.min(p1, w / 2);
-  p1 = Math.min(p1, h / 2); // limit by whole height or by half height?
-  var geo = new go.Geometry();
-  // a single figure consisting of straight lines and quarter-circle arcs
-  geo.add(new go.PathFigure(0, 0)
-      .add(new go.PathSegment(go.PathSegment.Line, w, 0))
-      .add(new go.PathSegment(go.PathSegment.Line, w, h - p1))
-      // .add(new go.PathSegment(go.PathSegment.Arc, 0, 90, w - p1, h - p1, p1, p1))
-      .add(new go.PathSegment(go.PathSegment.Line, w * 0.7, h))
-      .add(new go.PathSegment(go.PathSegment.Line, 0, h).close()));
-  // don't intersect with two bottom corners when used in an "Auto" Panel
-  geo.spot1 = new go.Spot(0, 0, 0.3 * p1, 0);
-  geo.spot2 = new go.Spot(1, 1, -0.3 * p1, -0.3 * p1);
-  return geo;
-});
-
 /*
 @Function:  Solution of dragging HTML element into go.Group in GoJS
             The key is to Add group.key to the property of node
@@ -356,4 +332,38 @@ function nodeDraggingToGroup(nd, ad) {
   });
 
   return nd;
+}
+
+// this DiagramEvent handler is called during the linking or relinking transactions
+function maybeChangeLinkCategory(e) {
+  var link = e.subject;
+  var linktolink = (link.fromNode.isLinkLabel || link.toNode.isLinkLabel);
+  e.diagram.model.setCategoryForLinkData(link.data, (linktolink ? LinkCategories[2] : ""));
+}
+
+function generatePartData(isGroup=false, width, height, locPoint, angle, cate, name, tp="") {
+  let nodeData = {
+    loc: go.Point.stringify(locPoint),
+    text: name, 
+    type: tp,
+    category: cate,
+    // go.size(width, height) is not avaliable
+    size: width+" "+height,
+    angle: angle, 
+  };
+
+  if (!isGroup) {
+    return nodeData; 
+  } else {
+    nodeData["isGroup"] = isGroup;
+    return nodeData;
+  }
+}
+
+function generateLinkData(cate, name, locS, locT) {
+  return {
+    category: cate,
+    text: name, 
+    points: new go.List().addAll([locS, locT])
+  };
 }

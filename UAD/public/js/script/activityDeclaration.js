@@ -6,27 +6,17 @@ Statement: this file provides all declarations that will be defined with GoJS li
 const $$ = go.GraphObject.make;
 //  Note nodes below is connected to Html elements' category
 const NodeCategories = [
-    'InitialNode', 'ActivityFinalNode', 'FlowFinalNode', 'Connector',
-    'Action', 'Object', 'DecisionNode', 'MergeNode', 'ForkNode', 'JoinNode','TextNode',
-    'SendCall', 'ReceiveCall', 'Comment'
+    'InitialNode', 'ActivityFinalNode', 'FlowFinalNode', 'Connector',   // 0-3
+    'Action', 'Object', 'DecisionNode', 'MergeNode', 'ForkNode', 'JoinNode','TextNode', // 4-10
+    'SendCall', 'ReceiveCall', 'Comment', 'TimeEvent', 'ActivityParameterNode', // 11-15
+    'ValueSpecification' // 16
 ];
 const GroupCategories = ['Partition', 'Interruption', 'Activity'];
 const LinkCategories = ['ControlFlow', 'ObjectFlow', 'CommentFlow'];
 /* Main view by GoJS    */
 var highlighter = undefined;
 var mySubDiagram = undefined;
+let mySubDiagUS = undefined;
 var activityOverview = undefined;
 var activityContextMenu = undefined;
 var activityInspector = undefined;
-
-/*  HTML elements that is used frequently  */
-const div_ActivityDiagram = "activityDiagramDiv";
-const divId_activityDiagram = '#' + div_ActivityDiagram;
-
-
-/* Fill color of all nodes in the diagram */
-var blackPure = "black";
-var defaultPure = "white";
-var yellowLinear = "beige";
-
-var strkWdth = 1;

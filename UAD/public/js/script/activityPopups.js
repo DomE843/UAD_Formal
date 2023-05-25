@@ -16,8 +16,7 @@ function clearmsg() {
   @Parameter: a valid string of HTML element's ID
 */
 function popDiv(divstr) {
-  var div = document.getElementById(divstr);
-  div.style.display = "block";
+  $(divstr).css("display", "block");
 }
 
 /*
@@ -25,7 +24,6 @@ function popDiv(divstr) {
   @Parameter: a valid string of HTML element's ID
 */
 function closeDiv(divstr) {
-  var div = document.getElementById(divstr);
-  div.style.display = "none";
+  $(divstr).css("display", "none");
 }
 

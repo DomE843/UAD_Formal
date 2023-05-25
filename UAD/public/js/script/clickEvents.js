@@ -154,7 +154,7 @@ function overviewToggle() {
     //display设置为none，即不模块不占用空间，否则会影响画图
     setTimeout(function () {
       view.css("display", "none");
-    }, 500);
+    }, 300);
   } else {
     view.css("display", "block");
     setTimeout(function () {
@@ -208,56 +208,56 @@ function showModelElements() {
     switch (it.value.category) {
       /*    Diagram Nodes   */
       case NodeCategories[0]:
-        liPng += "ad_initial.png";
+        liPng += "act_initial.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[1]:
-        liPng += "ad_end.png";
+        liPng += "act_end.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[2]:
-        liPng += "ad_flowEnd.png";
+        liPng += "act_flowEnd.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[3]:
-        liPng += "ad_connector.png";
+        liPng += "act_connector.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[4]:
-        liPng += "ad_action.png";
+        liPng += "act_action.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[5]:
-        liPng += "ad_object.png";
+        liPng += "act_object.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[6]:
-        liPng += "ad_decision.png";
+        liPng += "act_decision.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[7]:
-        liPng += "ad_merge.png";
+        liPng += "act_merge.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[8]:
-        liPng += "ad_fork.png";
+        liPng += "act_fork.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case NodeCategories[9]:
-        liPng += "ad_join.png";
+        liPng += "act_join.png";
         li = genLiElement(liPng, it.value.text);
         break;
       /*    Diagram Groups   */
       case GroupCategories[0]:
-        liPng += "ad_lane.png";
+        liPng += "act_lane.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case GroupCategories[1]:
-        liPng += "ad_interruption.png";
+        liPng += "act_interruption.png";
         li = genLiElement(liPng, it.value.text);
         break;
       case GroupCategories[2]:
-        liPng += "ad_activityParam.png";
+        liPng += "act_activityParam.png";
         li = genLiElement(liPng, it.value.text);
         break;
       default:
@@ -281,3 +281,216 @@ function genLiElement(png, txt) {
 
   return li;
 }
+
+/*                        Diagram Editing Operation --- Start
+  @NOTE:  Functions below are mainly constrained by go.GraphLinksModel in GoJS,
+          such as ".addNodeData"
+*/
+////// Basic functions
+function _findLinksByKeys(from, to) {
+  var f = mySubDiagram.findNodeForKey(from);
+  var t = mySubDiagram.findNodeForKey(to);
+  return f.findLinksBetween(t);
+}
+
+function getNodeByName(name) {
+  var data;
+  mySubDiagram.nodes.each(nd => {
+    if (nd instanceof go.Node && nd.data.text == name){
+      data = nd.data;
+      return true;
+    }
+  });
+  return data;
+}
+
+function getLinkByName(name) {
+  var data;
+  mySubDiagram.links.each(lk => {
+    if (lk instanceof go.Link && lk.data.text == name){
+      data = lk.data;
+      return true;
+    }
+  });
+  return data;
+}
+
+// Update
+function trans_update_node(node, name, newText, prop) {
+  var data = getNodeByName(name);
+
+  mySubDiagram.startTransaction("update_node_data");
+  // mySubDiagram.model.setDataProperty(data, "category", newCate);
+  mySubDiagram.model.setDataProperty(data, "text", newText);
+  mySubDiagram.commitTransaction("update_node_data");
+}
+
+// Add
+function trans_add_node(newCate, newText) {
+  mySubDiagram.startTransaction("add_node_data");
+  var nodeData = { category: newCate, text: newText };
+  nodeData["loc"] = go.Point.stringify(new go.Point(200, 300));  
+
+  mySubDiagram.model.addNodeData(nodeData);
+  mySubDiagram.commitTransaction("add_node_data");
+}
+
+// Remove 
+function trans_remove_node(name) {
+  var data = getNodeByName(name);
+
+  mySubDiagram.startTransaction("remvoe_node_data");
+  mySubDiagram.model.removeNodeData(data);
+  mySubDiagram.commitTransaction("remvoe_node_data");
+}
+
+
+function trans_update_link(from, to, newCate="ControlFlow", newText="") {
+  var linkIter = _findLinksByKeys(from, to).iterator;
+
+  mySubDiagram.startTransaction("update_link_data");
+  linkIter.each (lk => {
+    mySubDiagram.model.setDataProperty(lk.data, "category", newCate);
+    mySubDiagram.model.setDataProperty(lk.data, "text", newText);
+  });
+  mySubDiagram.commitTransaction("update_link_data");
+}
+
+function trans_add_link(fKey, tKey, newCate="ControlFlow", newText="") {
+  var linkdata = {
+    from: fKey, 
+    to: tKey,
+    category: newCate,
+    text: newText
+  };
+
+  mySubDiagram.startTransaction("add_link_data");
+  mySubDiagram.model.addLinkData(linkdata);
+  mySubDiagram.commitTransaction("add_link_data");
+}
+
+function trans_remove_link(name) {
+  var data;
+
+  mySubDiagram.startTransaction("remove_link_data");
+  mySubDiagram.links.each(lk => {
+    if (lk.data.category == "ControlFlow" && lk.data.text == name){
+      data = lk.data;
+      return true;
+    }
+  });
+  mySubDiagram.model.removeNodeData(data);
+  mySubDiagram.commitTransaction("remove_link_data");
+}
+
+function ocl_apply_del(node,prop, name) {
+  // if (prop == "node") {
+    trans_remove_node(name); 
+  // } else {
+  //   trans_remove_link(name); 
+  // }
+}
+
+function ocl_apply_add(node, name, prop) {
+  if (prop == "node") {
+    trans_add_node(prop, name); 
+  } else {
+    // trans_add_link(prop, name); 
+  }
+}
+
+function ocl_apply_upd(node, oldV, newV, prop) {
+  // if (prop == "node") {
+    trans_update_node(node.text, oldV, newV, prop); 
+  // } else {
+  // }
+}
+/*            Diagram Editing Operation ---End                   */ 
+
+
+/* Trace/Loop finding - Customize for each diagram --- S  */
+const pathsDivId = "activityDiagramPath";
+
+function getBegins(list) {
+  let begin = mySubDiagram.findNodesByExample({
+    category: NodeCategories[0]
+  });
+  list.addAll(begin);
+
+}
+
+function getEnds(list) {
+  mySubDiagram.nodes.iterator.each(nd => {
+    const cat = nd.category;
+    if (cat === NodeCategories[1] || cat === NodeCategories[2]) {
+      list.push(nd);
+    }
+  });
+}
+
+function initPathsDiv() {
+  popDiv("div.aDFooter");
+  popDiv("#ADdiv_trace");
+  $("#" + pathsDivId).find("option").remove();
+
+  normPaths.clear();
+  loopPaths.clear();
+}
+
+function subDiagramTrace() {
+  var bLst = new go.List();
+  var eLst = new go.List();
+
+  getBegins(bLst);
+  getEnds(eLst);
+
+  initPathsDiv();
+  findPathsBetweenTypes(bLst, eLst);
+}
+
+function subDiagramLoop() {
+  let bLst = new go.List();
+  let eLst = new go.List();
+
+  getBegins(bLst);
+  getEnds(eLst);
+
+  initPathsDiv();
+  findLoopsBetweenTypes(bLst, eLst);
+}
+/* Trace/Loop finding - Customize for each diagram --- E  */
+
+
+//#################### Unified Structure of AD - S ############################
+function constructUS() {
+    mySubDiagUS = usDiag(1);
+
+    // add into US.Ele by User-defined property of "node.data" 
+    mySubDiagUS.mergeCatesInternally(mySubDiagUS.ModelElement, ['Action','Object'], "AO");
+    mySubDiagUS.mergeCatesInternally(mySubDiagUS.DependencyRelation, ['ControlFlow','ObjectFlow'], "ActivityEdge");
+
+    console.log(mySubDiagUS);
+}
+
+function buildDegreeByCate() {
+  let degreeModel = {};
+
+  mySubDiagram.nodes.each(pt => {
+    if (pt instanceof go.Node) {
+      let degreesWithType = {
+        text: pt.data.text,
+        category: pt.category,
+        in: pt.findLinksInto().count,
+        out: pt.findLinksOutOf().count,
+      };
+
+      Object.assign(degreeModel, {
+        [pt.key]: degreesWithType
+      });
+    }
+  });
+
+  console.log(degreeModel);
+  // return degreeModel;
+}
+//#################### Unified Structure of AD - E ############################

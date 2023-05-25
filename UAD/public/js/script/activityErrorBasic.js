@@ -10,7 +10,7 @@ var basicErrors = [];
 /*
 以下数组用于存储对应Node，针对不同类型进行不同的 检测处理；
 */
-var nodeArray_Group = [];
+var nodeArray_lanes = [];
 var nodeArray_initial = [];
 var nodeArray_end = [];
 var nodeArray_decision = [];
@@ -51,6 +51,7 @@ function activityErrorChecking() {
     checkMergeNode();
     checkForkNode();
     checkJoinNode();
+    checkConnector(nodeArray_cntor);
   }
 
   alertErrorInfo("ADBasicError", basicErrors);
@@ -103,7 +104,7 @@ function resetFlowsArray() {
 }
 
 function resetNodeArrays() {
-  nodeArray_Group.length = 0;
+  nodeArray_lanes.length = 0;
   nodeArray_initial.length = 0;
   nodeArray_end.length = 0;
   nodeArray_decision.length = 0;
@@ -148,7 +149,7 @@ function classifyNodes(allNodes) {
   it.next(); //@NOTE: Necessary !!!
 
   while (it.value instanceof go.Group) {
-    // nodeArray_Group.push(it.value);
+    // nodeArray_lanes.push(it.value);
     it.next();
   }
   /* go.Node part */
@@ -448,6 +449,53 @@ function checkFinalNode() {
 }
 
 /*
+@Function:    Check connectors for pairing and Edges number;
+*/
+/*************************** Map Initialization - S ****************/
+
+function initMapByStrVal(map, nodeArray) {
+  for (let i = 0; i < nodeArray.length; i++) {
+    const eTxt = nodeArray[i].text;
+    
+    if (map.has(eTxt)) {
+      let v = map.getValue(eTxt) + 1; 
+      map.Set(eTxt, v);
+    } else {
+      map.add(eTxt, 1);
+    }
+  }
+
+  return map.count;
+}
+/*************************** Map Initialization - E ****************/
+
+function checkConnector(array) {
+  // initialize map for counting the number of Node.text;
+  var cntMap = new go.Map();
+  var mapSize = initMapByStrVal(cntMap, array);
+
+  for (let i = 0; i < array.length; i++) {
+    const eNode  = array[i];
+    var ins = countInLinks(eNode);
+    var outs = countOutLinks(eNode);
+
+    // if the counted value is 1, the it's unpaired
+    if(1 === cntMap.getValue(eNode.text)){
+      basicErrors.push({node: eNode.key,rule: 26 });
+    }
+
+    // Incoming & Outgoing edge should have only one.
+    if (ins > 1) {
+      basicErrors.push({node: eNode.key,rule: 15 });
+    }
+    if (outs > 1) {
+      basicErrors.push({node: eNode.key,rule: 16 });
+    }
+  }
+}
+
+
+/*
 @Function:  Check if the Initial Array, and Final Array are Empty;
 @Parameter: 
     'array': refers to Node_dataArray
@@ -464,15 +512,16 @@ function emptyArray(array, errId) {
 }
 
 function checkGroups() {
-  console.log(nodeArray_Group);
   /*
   1. Link quantitiesk, in & out;
   2. memberparts, is this checking excluding ParameterNode>
   3. parameterNode, special property of <Object Node>
   4. textTitle, [optional]
   */
-  for (let i = 0; i < nodeArray_Group.length; i++) {
-    const ele = nodeArray_Group[i];
+  let swimlaneNames = [];
+  for (let i = 0; i < nodeArray_lanes.length; i++) {
+    const ele = nodeArray_lanes[i];
+    let grpName = ele.data.text;
     let x = errorPairObj(ele.key, 0);
 
     var mem = ele.memberParts();
@@ -481,37 +530,32 @@ function checkGroups() {
     // ele.preConditions = [];
     // ele.postConditions = [];
 
-
+    if (!swimlaneNames.includes(grpName)) {
+      swimlaneNames.push(grpName); 
+    } else {
+      x.rule = 29;
+      basicErrors.push(x);
+    } 
   }
+
+  // get duplicated names
+  var uniqueSwimlanes = [];
+  checkGroup_uniqueSwimlane(swimlaneNames, uniqueSwimlanes);
 }
 
-function checkConnetor(){
-  var nameIdxArr = [];
-  for (let j = 0; j < nodeArray_cntor.length; j++) {
-    const eTxt = nodeArray_cntor[j].text;
-    var idx = isExistedInObject(eTxt, nameIdxArr);
+function checkGroup_uniqueSwimlane(laneNames, res) {
+  const len = laneNames.length; 
 
-    if(nameIdxArr.length <= 0 || idx === -1) {
-      var nameIdxObj = {"index": [], "name": eTxt};
-
-      nameIdxObj.index.push(j);
-      nameIdxArr.push(nameIdxObj);
-    } else {
-      nameIdxArr[idx].index.push(j)
-    }
-  }
-  console.log(nameIdxArr);
-
-  for (let i = 0; i < nameIdxArr.length; i++) {
-    const e = nameIdxArr[i];
-    if (e.index.length <= 1) {
-      // unpaired.
-    }
+  for (let i = len-1; i > 0; i--) {
+    const nm = laneNames[i];
     
-    // degree
-    examingInAndOut(e, nodeArray_cntor); // find node := findNodeForKey(nodeArray_cntor[idx].key);
+    for (let j = i - 1; j >= 0; j--) {
+      
+    }
   }
 
+  var tmpSet = new Set(laneNames);
+  return (tmpSet.size === len);
 }
 
 function examingInAndOut(e, srcArr) {
@@ -622,78 +666,5 @@ function addErrorItem(x, arr) {
   }
 }
 
-/*************************** Convert to Unified Structure - S ****************/
-// Unified Structure declaration;
-var usStruct = {
-  // global elements & relations
-  "ME":undefined,
-  "RE":undefined,
-
-  // constraints
-  "CME":undefined,
-  "CRE":undefined,
-
-  // nodes
-  "Nodes":{},
-  "Links":{}
-};
 
 
-/*
-@Function:    This is outter shell with Non-Parameter
-@NOTE:        Changes are needed if this function is invoked in other diagrams;
-*/
-function activitySaveUS() {
-  valueForUS(usStruct);
-   
-  const textDivId = "myActivitySavedModel";     // This may change
-  var convertedStr = JSON.stringify(usStruct);
-
-  $("#" + textDivId).text(convertedStr);
-}
-
-/*
-@Function:    The US structure will be valued here.
-*/
-function valueForUS(usStruct) {
-  const modelJsonStr = mySubDiagram.model.toJson();
-
-  // global
-  usStruct.ME = parsePartialJson(modelJsonStr, "nodeDataArray");
-  usStruct.RE = parsePartialJson(modelJsonStr, "linkDataArray");
-
-  // constraints
-
-  // Node categories;
-  createObjByArray(usStruct.Nodes, usStruct.ME);
-  createObjByArray(usStruct.Links, usStruct.RE);
-}
-
-/*
-@Function:    Parse partial string of JSONStr to a JSON object;
-*/
-function parsePartialJson(jsonStr, key) {
-  const obj = JSON.parse(jsonStr);
-  
-  return obj[key];
-}
-
-/*
-@Function:    An JSON Object with type will created by Node as element of NodeDataArray;
-*/
-function createObjByArray(obj, array) {
-  for (let i = 0; i < array.length; i++) {
-    const el = array[i];
-    var nCate = el.category;
-
-    // if Node type doesn't exist, then create one 
-    if (!Object.hasOwnProperty.call(obj, nCate)) {
-      obj[nCate] = new Array();
-    }
-
-    // if Node type existed already, append its elements;
-    obj[nCate].push(el);
-  }
-}
-
-/*************************** Convert to Unified Structure - E ****************/

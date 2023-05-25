@@ -1,22 +1,5 @@
-const { toNamespacedPath } = require("path/posix");
-
 var consistentErrors = [];
 
-/// Activity Diagrams VS Activity Diagrams
-
-
-/// Activity Diagrams VS Class Diagrams
-function getClassNameOfActivity(classNames) {
-  classNames.length = 0;
-
-  for (let i = 0; i < nodeArray_object.length; i++) {
-    classNames.push(nodeArray_object[i].text); 
-    // classNames.push(nodeArray_object[i].data.text); 
-  }
-  console.log(classNames.length + " Classes Found.\n");
-}
-
-/// Activity Diagrams VS Use Case Diagrams
 
 /**************** Activity Diagram Refinement Checking ----S *****************/
 // this file must be put after actvitiyTrace.js 
@@ -139,7 +122,7 @@ function sequenceApproximate() {
   refKeysReflection(keysPairArr);
 
   // 获取上近似路径
-  nodesOnPathList.each(function (path) {
+  normPaths.each(function (path) {
     var subSeq = [];
     
     path.each(function (node) {
