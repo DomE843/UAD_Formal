@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
   
   let data = JSON.stringify(req.body);
   
-  fs.writeFile('../public/src/json/' + currentVersion + '.json', data, err => {
+  fs.writeFile('../../storager/json/' + currentVersion + '.json', data, err => {
     if(err === null) {
       console.log('写入文件成功');
     } else {
@@ -38,7 +38,7 @@ router.post('/', (req, res) => {
 });
 
 router.post('/case', (req, res) => {
-  fs.readFile("../public/src/json/ErrExample_Complex.json", "utf8", (err, data) => {
+  fs.readFile("../../storager/json/ErrExample_Complex.json", "utf8", (err, data) => {
     if (err) {
       console.log(err);
     } else {
@@ -49,7 +49,7 @@ router.post('/case', (req, res) => {
 
 router.post('/readServerDirectory', (req, res) => {
   //遍历目录
-  fs.readdir("../public/src/json", (err, files) => {
+  fs.readdir("../../storager/json", (err, files) => {
     if (err) {
       res.end("Cannot find directory!")
     } else {
@@ -64,7 +64,7 @@ router.post('/readServerDirectory', (req, res) => {
 
 router.post('/readServerFile', (req, res) => {
   let fileName = req.body.fileName;
-  fs.readFile(`../public/src/json/${fileName}`, "utf8", (err, data) => {
+  fs.readFile(`../../storager/json/${fileName}`, "utf8", (err, data) => {
     if (err) {
       console.log(err);
     } else {
