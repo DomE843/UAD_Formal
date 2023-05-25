@@ -6,7 +6,7 @@
 function showErrorDetail(array){
   $("#ADErrorDetails li").remove();
   
-  $.getJSON("../../public/configures/errorRules.json", function (data) {
+  $.getJSON("../../../server/activityDiagram_tgf/public/src/json/errorRules.json", function (data) {
     var count = 0;
     for (let i = 0; i < array.length; i++) {
       activityAddErrorItem(++count, array[i], data);
@@ -21,7 +21,7 @@ function activityAddErrorItem(order, errObj, jsonObj) {
   var errID = document.createElement('span');
   var errDescription = document.createElement('span');
   
-  errIcon.src = '../../public/images/Icon_debug/warn_yellow_triangle.png';
+  errIcon.src = '../../../server/activityDiagram_tgf/public/src/images/icon/warn_yellow_triangle.png';
 
   errID.innerHTML = ' ' + String(order) + '. ';
 
