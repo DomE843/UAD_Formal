@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" >
+  <title>UML Activity Diagram</title>
+  <script type="text/javascript" src="../public/js/lib/go.js"></script>
+  <script type="text/javascript" src="../public/js/lib/DataInspector.js"></script>
+
+  <script type="text/javascript" src="../public/js/script/activityDeclaration.js"></script>
+  <script type="text/javascript" src="../public/js/script/FigureExt.js"></script>
+  <script type="text/javascript" src="../public/js/script/activityToolBar.js"></script>
+  <script type="text/javascript" src="../public/js/script/activityDiagramFunctions.js"></script>
+  <script type="text/javascript" src="../public/js/script/activityContextMenu.js"></script>
+  <script type="text/javascript" src="../public/js/script/activityTrace.js"></script>
+  <script type="text/javascript" src="../public/js/script/clickEvents.js"></script>
+  <script type="text/javascript" src="../public/js/script/activityDiagram.js"></script>
+  <script type="text/javascript" src="../public/js/script/activityPopups.js"></script>
+  <script type="text/javascript" src="../public/js/script/unifiedStructure.js"></script>
+  <script type="text/javascript" src="../public/js/script/activityErrorTable.js"></script>
+  <script type="text/javascript" src="../public/js/script/activityErrorBasic.js"></script>
+
+  <!-- 样式 -->
+  <link rel="stylesheet" type="text/css" href="../public/css/nav.css" />
+  <link rel="stylesheet" type="text/css" href="../public/css/pop-ups.css" />
+  <link rel="stylesheet" type="text/css" href="../public/css/tmpAD.css" />
+  <link rel="stylesheet" type="text/css" href="../public/css/jquery-ui.min.css" />
+
+  <script type="text/javascript" src="../public/js/lib/jquery.min.js"></script>
+  <script type="text/javascript" src="../public/js/lib/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="../public/js/lib/fileManager.js"></script>
+  <script type="text/javascript" src="../public/js/lib/nav.js"></script>
+  <script type="text/javascript" src="../public/js/lib/FileSaver.js"></script>
+
+  <script type="text/javascript" src="../public/js/script/activityInit.js"></script>
+</head>
+<body onload="ADInit()">
+  <div class="nav">
+    <div class="dropdown">
+      <!--设置下拉框的按扭名称-->
+      <a>File</a>
+      <!--设置下拉框的内容-->
+      <div class="dropdown-content">
+        <a onclick="newDiagram()">New</a>
+        <a onclick="activitySave()">Save</a>
+        <a onclick="activitySaveUS()">Save as US</a>
+        <a onclick="activityLoad()">Load</a>
+        <a>Exit</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <!--设置下拉框的按扭名称-->
+      <a>Edit</a>
+      <!--设置下拉框的内容-->
+      <div class="dropdown-content">
+        <a onclick="actUndo()">Undo</a>
+        <a onclick="actRedo()">Redo</a>
+        <div style="border-bottom:1px solid #555555;"></div>
+        <a onclick="actCutElements()">Cut</a>
+        <a onclick="actCopyElements()">Copy</a>
+        <a onclick="actPasteElements()">Paste</a>
+        <a onclick="actDeleteElements()">Delete</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <!--设置下拉框的按扭名称-->
+      <a>View</a>
+      <!--设置下拉框的内容-->
+      <div class="dropdown-content">
+        <a id="view_alys" onclick="viewToggle('UmlRightDiv')">AnalysisView</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <!--设置下拉框的按扭名称-->
+      <a>Tool</a>
+      <!--设置下拉框的内容-->
+      <div class="dropdown-content">
+        <a onclick="showMapButton()">Map</a>
+        <a onclick="inspectorToggle()">Inspector</a>
+      </div>
+    </div>
+
+    <!-- 关于图结构分析的下拉列表 -->
+    <div class="dropdown">
+      <a>Analysis</a>
+      <div class="dropdown-content">
+        <a onclick="activityErrorChecking()">ErrorCheking</a>
+        <!-- <a onclick="diagramTrace()">Trace</a> -->
+        <a onclick="diagramLoop()">LoopChecking</a>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <!--设置下拉框的按扭名称-->
+      <a>Help</a>
+      <!--设置下拉框的内容-->
+      <div class="dropdown-content">
+        <a>Help</a>
+        <!-- <a onclick="setLinkContext()">About</a> -->
+        <div style="border-bottom:1px solid #555555;"></div>
+        <a onclick="activityCaseStudy()">Case study</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 工具条 -->
+  <div id="toolBar">
+    <div id="toolBar1">
+      <div class="toolBarSelect"> <span>Font:</span>
+        <select name="font">
+          <option>Arial Black</option>
+          <option>New York</option>
+          <option>sans-serif</option>
+        </select>
+      </div>
+      <div class="toolBarSelect"> <span>Font-size:</span>
+        <select name="font">
+          <option>12px</option>
+          <option>14px</option>
+          <option>16px</option>
+          <option>18px</option>
+          <option>20px</option>
+        </select>
+      </div>
+      <div class="toolBarSelect"> <span>Fill:</span>
+        <select class="fillColor" name="fill">
+          <option style="background-color:#ff0000;color:#000000"></option>
+          <option style="background-color:#12ff02;color:#000000"></option>
+          <option style="background-color:#0019ff;color:#000000"></option>
+        </select>
+      </div>
+    </div>
+
+    <div id="toolBar2">
+      <input type="file" id="importFile" style="display: none;" onchange="actUploadJson(this)" />
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/openFile.png" onclick="actImportJsonFile()"
+          title="Import"> </div>
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/save.png" onclick="actExportJsonFile()"
+          title="Export"> </div>
+      <!-- <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/zoomIn.png" title="Zoom In"> </div>
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/zoomOut.png" title="Zoom Out"> </div> -->
+    </div>
+
+    <div id="toolBar3">
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/panorama.png"
+          onclick="activityDiagramZoomToFit()" title="Zoom to Fit"> </div>
+      <div class="toolBarIcon"> <img src="../public/images/toolBarIcon/printscreen.png" onclick="printscreen()"
+          title="Printscreen"> </div>
+    </div>
+  </div>
+
+  <!-- 主要作图区---tgf -->
+  <div class="aDmainDiagram" style="width: 100%; display: flex; justify-content: space-between;">
+    <div id="recoverButton">
+      <a><img src="../public/images/icon/expand_white.png" class="recover" /></a>
+    </div>
+    <!-- 左侧工具栏 -->
+    <div id="UmlFunctionDiv">
+      <div id="uml_box_palette">
+        <div id="UmlFunctionsList">
+          <div class="cueText">Tool Box
+            <a onclick=""><img src="../public/images/icon/fold_white.png" class="delete" /></a>
+          </div>
+          <div class="subNavBox">
+            <div class="subNav currentDd currentDt">
+              <a onclick="">Basic Tools</a>
+            </div>
+            <ul class="navContent" style="display:block">
+              <!-- Node -->
+              <li category="InitialNode" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_initial.png" /><span>Initial</span></a>
+              </li>
+              <li category="ActivityFinalNode" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_end.png" /><span>ActivityEnd</span></a>
+              </li>
+              <li category="FlowFinalNode" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_flowEnd.png" /><span>FlowEnd</span></a>
+              </li>
+              <li category="Connector" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_connector.png" /><span>Connector</span></a>
+              </li>
+              <li category="Action" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_action.png" /><span>Action</span></a></li>
+              <li category="Object" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_object.png" /><span>Object</span></a></li>
+              <li category="DecisionNode" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_decision.png" /><span>Decision</span></a>
+              </li>
+              <li category="MergeNode" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_merge.png" /><span>Merge</span></a></li>
+              <li category="JoinNode" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_join.png" /><span>JoinNode</span></a>
+              </li>
+              <li category="ForkNode" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_fork.png" /><span>ForkNode</span></a>
+              </li>
+              <li category="TextNode" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_text.png" /><span>TextNode</span></a>
+              </li>
+              <li category="SendCall" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_send.png" /><span>SendCall</span></a>
+              </li>
+              <li category="ReceiveCall" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_receive.png" /><span>ReceiveCall</span></a>
+              </li>
+              <li category="Partition" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_lane.png" /><span>Partition</span></a>
+              </li>
+              <li category="Interruption" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_interruption.png" /><span>Interruption</span></a>
+              </li>
+              <li category="Activity" class="draggableElement"><a><img
+                    src="../public/images/Icon_palette/ad_activityParam.png" /><span>Activity</span></a>
+              </li>
+              <!-- 该节点拖动异常，仅此一个 -->
+              <li category="ControlFlow" class="draggableElement aDLink"><a><img
+                    src="../public/images/Icon_palette/ad_cf.png" /><span>ControlFlow</span></a>
+              </li>
+              <li category="ObjectFlow" class="draggableElement aDLink"><a><img
+                    src="../public/images/Icon_palette/ad_of.png" /><span>ObjectFlow</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="myOverviewDiv" class="myOverviewDiv"></div>
+    <!-- 鹰眼视图 -->
+    <!-- <input type="button" id="myButton" value="map"> -->
+    <button id="myButton" onclick="overviewToggle()">Map</button>
+    <div id="activityInspectorDiv" class="actInspector" style="display: none;"></div>
+    <!--gojs画板-->
+    <div id="activityDiagramDiv" style="background-color: whitesmoke"></div>
+
+    <!-- 右侧菜单栏 Start -->
+    <div class="rightMenu" id="UmlRightDiv">
+      <div class="rightMenuInner">
+        <div id="rightMenuCloseButton">
+          <a onclick="viewToggle('UmlRightDiv')"><img src="../public/images/icon/close_white.gif" class="recover" /></a>
+        </div>
+        <div class="cueText">Activity Analysis</div>
+        <div class="TreeWrap">
+          <div class="MenuBoxClose" id="Menu_0">
+            <div class="MenuBox titBox">
+              <h3 class="Fst"><a href="javascript:showMenu(0);">Error Checking</a></h3>
+            </div>
+            <div class="txtBox">
+              <ul id="activityDiagramErrors">
+                <div class="MenuBoxClose indentMenuBox" id="Menu_1">
+                  <div class="MenuBox titBox">
+                    <h3 class="Fst"><a href="javascript:showMenu(1);" onclick="showErrorDetail(basicErrors)">Basic
+                        Errors <span class="adErrorsCount" id="ADBasicError"></span></a></h3>
+                  </div>
+                </div>
+                <!--MenuBox-->
+
+                <div class="MenuBoxClose indentMenuBox" id="Menu_2">
+                  <div class="MenuBox titBox">
+                    <h3 class="Lst"><a href="javascript:showMenu(2);"
+                        onclick="showErrorDetail(consistentErrors)">Consistent Errors <span class="adErrorsCount"
+                          id="ADConstError"></span></a>
+                    </h3>
+                  </div>
+                </div>
+                <!--MenuBox-->
+
+              </ul>
+            </div>
+          </div><!-- .MenuBoxClose end -->
+
+          <div class="MenuBoxClose" id="Menu_0">
+            <div class="MenuBox titBox">
+              <h3 class="Fst"><a href="javascript:showMenu(3);">Model</a></h3>
+            </div>
+            <div class="txtBox">
+              <ul id="ModelElementsDiv">
+              </ul>
+            </div>
+          </div><!-- .ModelElementsDiv end -->
+        </div>
+      </div><!-- end of rightMenuInner -->
+
+      <div id="rightMenuDetail" style="display: block;">
+        <div class="detail">Results Detail</div>
+        <div>
+          <ul id="ADErrorDetails">
+            <!-- <li> </li> -->
+          </ul>
+        </div>
+      </div><!-- end of rightMenuDetail -->
+
+    </div>
+    <!-- 右侧菜单栏 End -->
+  </div>
+
+  <!-- 服务端读文件框 Start -->
+  <div id="readServerFileDraggable" class="draggable infoDraggable">
+    <div id="readServerFileDraggableHandle" class="handle"><span>文件</span></div>
+    <table class="readServerFileTable">
+      <tbody id="readServerFileTbody"></tbody>
+    </table>
+  </div>
+  <!-- 服务端读文件框 End -->
+
+  <!-- Activity Footer -->
+  <div class="aDFooter" style="display: block;">
+    <div id="ADdiv_json" class="aDdiv_item" style="display: none;">
+      <div class="aDdivHeader">
+        <a href="javascript:void(0)" onclick="closeDiv('ADdiv_json')" title="Click to Close"><span>Json
+            Data</span></a>
+      </div>
+      <textarea class="aDdivContent" id="myActivitySavedModel">
+{ "class": "go.GraphLinksModel",
+"nodeDataArray": [],
+"linkDataArray": []
+}
+            </textarea>
+    </div>
+
+    <div id="ADdiv_trace" class="aDdiv_item" style="display: block;">
+      <div class="aDdivHeader">
+        <a href="javascript:void(0)" onclick="closeDiv('ADdiv_trace')" title="Click to Close"><span>Diagram
+            Trace</span></a>
+      </div>
+      <!-- name="ActivityDiagramPaths" -->
+      <select class="aDdivContent" id="activityDiagramPath" size="10"></select>
+    </div>
+  </div>
+
+  <!--用于记录子窗口是由哪个UmlDiagram生成 by:ljq-->
+  <div style="display: none">
+    key:<div style="float: right;" id="UmlDiagramKey"></div>
+  </div>
+</body>
+
+</html>

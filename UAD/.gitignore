@@ -1,0 +1,7 @@
+# Folders
+node_modules
+.vscode
+.idea
+.git
+.vs
+.package-lock.json

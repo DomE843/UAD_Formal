@@ -1,0 +1,587 @@
+/*############### 弹窗样式设置 Start ###############*/
+#myButton {
+  position: absolute;  /* (这里也可以用absolute和fixed） */
+  right: 210px;
+  top: 89.5px;
+  z-index: 999;
+  width: 40px; 
+  height: 20px;
+  background-color: white;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #000000;
+}
+.myOverviewDiv {
+	position: absolute;  /* (这里也可以用absolute和fixed） */ 
+  display: none;
+	right: 210px;
+  top: 89.5px;
+	z-index: 998;
+	width: 160px; 
+	height: 160px;
+	background-color: white;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #000000;
+  opacity: 0;
+  transform: scale(0.5, 0.5);
+  transition: transform 0.5s linear, opacity 0.5s linear;
+}
+.myOverview-click-transiton {
+  display: block;
+  opacity: 1;
+  transform: scale(1, 1);
+}
+
+/* 右键操作菜单样式 */
+.menu {
+  display: none;
+  position: absolute;
+  opacity: 0;
+  margin: 0;
+  padding: 8px 0;
+  z-index: 999;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+  list-style: none;
+  background-color: #ffffff;
+  border-radius: 4px;
+}
+
+.menu-item {
+  display: block;
+  position: relative;
+  min-width: 60px;
+  margin: 0;
+  padding: 6px 16px;
+  font: bold 12px sans-serif;
+  color: rgba(0, 0, 0, .87);
+  cursor: pointer;
+}
+
+.menu-item::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+}
+
+.menu-item:hover::before {
+  opacity: .04;
+}
+
+.menu .menu {
+  top: -8px;
+  left: 100%;
+}
+
+.show-menu, .menu-item:hover > .menu {
+  display: block;
+  opacity: 1;
+}
+
+/*自定义alert样式 Start */
+#alertMsg{
+    height: 2rem;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    margin-top: -1rem;
+    line-height: 2rem;
+    width: 100%;
+    z-index: 999;
+}
+#alertMsg span{
+    color: #fff;
+    background: rgba(0,0,0,0.6);
+    height: 2rem;
+    display: inline-block;
+    padding: 0 3rem;
+    border-radius: 5px;
+}
+/*自定义alert样式 End */
+
+/*info信息框样式 Start */
+.draggable {
+  display: inline-block;
+  vertical-align: top;
+  border: 4px solid #BBB;
+  border-radius: 4px;
+  background-color: #F5F5F5;
+  width: auto;
+  height: auto;
+
+  position: absolute;
+  top: 250px;
+  left: 300px;
+  z-index: 500;
+}
+
+.classSaveButton {
+  position: relative;
+  left: 60px;
+  background-color: #d3d3d3; 
+  color: #000000;
+}
+.sequenceSaveButton {
+  position: relative;
+  left: 160px;
+  background-color: #d3d3d3; 
+  color: #000000;
+}
+
+.handle {
+  background-color: lightblue;
+  cursor: move;
+  text-align: center;
+  height: 20px;
+  margin: 2px;
+  padding-top: 5px;
+  font: bold 12px sans-serif;
+}
+
+#infoDraggable {
+ display: none; 
+}
+.infoDraggable {
+  font: 12px helvetica, sans-serif;
+  opacity: 0;
+  transform: scale(0.5, 0.5);
+  transition: transform 0.5s linear, opacity 0.5s linear;
+}
+.infoDraggable-click-transiton {
+  opacity: 1;
+  transform: scale(1, 1);
+}
+
+#myInfo {
+  width: 100%;
+  overflow: hidden;
+}
+
+/*use case group框样式 Start */
+.hide {
+  display: none !important;
+}
+.left {
+  float: left;
+}
+/* 弹窗 */
+.umlGroupDiv {
+  width: 50%;
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  z-index: 999;
+  background: white;
+  border-radius: 3px;
+  border: 1px solid #eec;
+}
+/* 弹窗上部 */
+.dlg_top {
+  position: relative;
+  height: 28px;
+  z-index: 3;
+  background: #f3f3f3;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom: 1px solid #eec;
+  cursor: move;
+}
+/* 弹窗右上角 ico */
+.dlg_btn_ico {
+  float: right;
+  background: transparent;
+  background-size: cover;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  margin-right: 15px;
+  margin-top: 7px;
+  background-repeat: no-repeat;
+}
+/* 弹窗右上角 ico 鼠标浮上去的样式 */
+.dlg_btn_ico:hover {
+  background-color: #eee;
+}
+/* 最小化 */
+/*.dlg_btn_min_top {
+  background-image: url(../images/ico_min.png);
+}*/
+/*!* 最大化 *!*/
+/*.dlg_btn_max_top {*/
+/*  background-image: url(../images/ico_max.png);*/
+/*}*/
+/*!* 还原 *!*/
+/*.dlg_btn_reback_top {*/
+/*  background-image: url(../images/ico_reback.png);*/
+/*}*/
+/* 关闭 */
+.dlg_btn_close_top {
+  background-image: url(../images/icon/ico_close.gif);
+}
+/* 左上角logo */
+.dlg_logo {
+  margin-left: 5px;
+  margin-top: -3px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* 弹窗标题 */
+.dlg_title {
+  line-height: 28px;
+  margin-left: 5px;
+}
+/* 弹窗内容 */
+.dlg_content {
+  position: relative;
+  min-height: 300px;
+  overflow-y: auto;
+  margin-right: 4px;
+}
+/* 弹窗底部 */
+.dlg_bottom {
+  position: absolute;
+  height: 35px;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  z-index: 3;
+  padding-top: 5px;
+  background: #f3f3f3;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top: 1px solid #eec;
+  text-align: center;
+}
+/* 缩放时右拉块 */
+#dlg_right {
+  width: 15px;
+  height: 100%;
+  float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: e-resize;
+  overflow: hidden;
+  opacity: 0;
+  z-index: 3;
+}
+/* 缩放时下拉块 */
+#dlg_bottom {
+  width:100%;
+  height:15px;
+  position:absolute;
+  left:0;
+  bottom:0;
+  cursor:n-resize;
+  overflow:hidden;
+  opacity:0;
+  z-index:3;
+}
+/* 缩放时右下拉块 */
+#dlg_right_bottom{
+  width:15px;
+  height:15px;
+  position:absolute;
+  right:0;
+  bottom:0;
+  cursor:nw-resize;
+  overflow:hidden;
+  font-size:12px;
+  text-align:center;
+  line-height:15px;
+  float:right;
+  z-index:4;
+}
+/*use case group框样式 End */
+
+/* Default CSS for the Data inspector */
+.inspector {
+  display: inline-block;
+  font: bold 14px helvetica, sans-serif;
+  background-color: #212121; /* Grey 900 */
+  color: #F5F5F5; /* Grey 100 */
+  cursor: default;
+}
+
+.inspector table {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.inspector td, th {
+  padding: 2px;
+}
+
+.inspector input {
+  background-color: #424242; /* Grey 800 */
+  color: #F5F5F5; /* Grey 100 */
+  font: bold 12px helvetica, sans-serif;
+  border: 0px;
+  padding: 2px;
+}
+
+.inspector input:disabled {
+  background-color: #BDBDBD; /* Grey 400 */
+  color: #616161; /* Grey 700 */
+}
+
+.inspector select {
+  background-color: #424242;
+}
+/*info信息框样式 End */
+
+/*读服务端文件框样式 Start */
+.readServerFileTable {
+  border-collapse: collapse;
+}
+
+.readServerFileTable th {
+  cursor: pointer;
+}
+
+a.icon {
+  -webkit-padding-start: 1.5em;
+  text-decoration: none;
+}
+
+a.icon:hover {
+  text-decoration: underline;
+}
+
+a.file {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAABHUlEQVR42o2RMW7DIBiF3498iHRJD5JKHurL+CRVBp+i2T16tTynF2gO0KSb5ZrBBl4HHDBuK/WXACH4eO9/CAAAbdvijzLGNE1TVZXfZuHg6XCAQESAZXbOKaXO57eiKG6ft9PrKQIkCQqFoIiQFBGlFIB5nvM8t9aOX2Nd18oDzjnPgCDpn/BH4zh2XZdlWVmWiUK4IgCBoFMUz9eP6zRN75cLgEQhcmTQIbl72O0f9865qLAAsURAAgKBJKEtgLXWvyjLuFsThCSstb8rBCaAQhDYWgIZ7myM+TUBjDHrHlZcbMYYk34cN0YSLcgS+wL0fe9TXDMbY33fR2AYBvyQ8L0Gk8MwREBrTfKe4TpTzwhArXWi8HI84h/1DfwI5mhxJamFAAAAAElFTkSuQmCC ") left top no-repeat;
+}
+
+a.dir {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAd5JREFUeNqMU79rFUEQ/vbuodFEEkzAImBpkUabFP4ldpaJhZXYm/RiZWsv/hkWFglBUyTIgyAIIfgIRjHv3r39MePM7N3LcbxAFvZ2b2bn22/mm3XMjF+HL3YW7q28YSIw8mBKoBihhhgCsoORot9d3/ywg3YowMXwNde/PzGnk2vn6PitrT+/PGeNaecg4+qNY3D43vy16A5wDDd4Aqg/ngmrjl/GoN0U5V1QquHQG3q+TPDVhVwyBffcmQGJmSVfyZk7R3SngI4JKfwDJ2+05zIg8gbiereTZRHhJ5KCMOwDFLjhoBTn2g0ghagfKeIYJDPFyibJVBtTREwq60SpYvh5++PpwatHsxSm9QRLSQpEVSd7/TYJUb49TX7gztpjjEffnoVw66+Ytovs14Yp7HaKmUXeX9rKUoMoLNW3srqI5fWn8JejrVkK0QcrkFLOgS39yoKUQe292WJ1guUHG8K2o8K00oO1BTvXoW4yasclUTgZYJY9aFNfAThX5CZRmczAV52oAPoupHhWRIUUAOoyUIlYVaAa/VbLbyiZUiyFbjQFNwiZQSGl4IDy9sO5Wrty0QLKhdZPxmgGcDo8ejn+c/6eiK9poz15Kw7Dr/vN/z6W7q++091/AQYA5mZ8GYJ9K0AAAAAASUVORK5CYII= ") left top no-repeat;
+}
+
+a.up {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmlJREFUeNpsU0toU0EUPfPysx/tTxuDH9SCWhUDooIbd7oRUUTMouqi2iIoCO6lceHWhegy4EJFinWjrlQUpVm0IIoFpVDEIthm0dpikpf3ZuZ6Z94nrXhhMjM3c8895977BBHB2PznK8WPtDgyWH5q77cPH8PpdXuhpQT4ifR9u5sfJb1bmw6VivahATDrxcRZ2njfoaMv+2j7mLDn93MPiNRMvGbL18L9IpF8h9/TN+EYkMffSiOXJ5+hkD+PdqcLpICWHOHc2CC+LEyA/K+cKQMnlQHJX8wqYG3MAJy88Wa4OLDvEqAEOpJd0LxHIMdHBziowSwVlF8D6QaicK01krw/JynwcKoEwZczewroTvZirlKJs5CqQ5CG8pb57FnJUA0LYCXMX5fibd+p8LWDDemcPZbzQyjvH+Ki1TlIciElA7ghwLKV4kRZstt2sANWRjYTAGzuP2hXZFpJ/GsxgGJ0ox1aoFWsDXyyxqCs26+ydmagFN/rRjymJ1898bzGzmQE0HCZpmk5A0RFIv8Pn0WYPsiu6t/Rsj6PauVTwffTSzGAGZhUG2F06hEc9ibS7OPMNp6ErYFlKavo7MkhmTqCxZ/jwzGA9Hx82H2BZSw1NTN9Gx8ycHkajU/7M+jInsDC7DiaEmo1bNl1AMr9ASFgqVu9MCTIzoGUimXVAnnaN0PdBBDCCYbEtMk6wkpQwIG0sn0PQIUF4GsTwLSIFKNqF6DVrQq+IWVrQDxAYQC/1SsYOI4pOxKZrfifiUSbDUisif7XlpGIPufXd/uvdvZm760M0no1FZcnrzUdjw7au3vu/BVgAFLXeuTxhTXVAAAAAElFTkSuQmCC ") left top no-repeat;
+}
+
+#readServerFileDraggable {
+  display: none;
+}
+
+#readServerFileDraggableHandle div {
+  position: relative;
+}
+/*读服务端文件框样式 Start */
+
+/* 文档生成规则设置样式（一致性分析样式上微调） Start */
+.partMenu_adjust {
+  padding: 1px !important;
+  padding-bottom: 38px !important;
+  width: auto !important;
+  height: auto !important;
+}
+.content_adjust {
+  width: auto !important;
+  height: auto !important;
+}
+.content_adjust .objectSelect_adjust {
+  width: auto !important;
+  height: auto !important;
+}
+.item_adjust {
+  padding: 8px 8px !important;
+  width: 250px !important;
+}
+.item_adjust .selectItem label {
+  width: 110px !important;
+}
+/* 文档生成规则设置样式（一致性分析样式上微调） End */
+
+/****************** 一致性分析 关联设置 S *****************/
+.partMenu {
+  position: absolute;
+  left: 400px;
+  top: 200px;
+
+  display: block;
+  width: 500px;
+  height: 270px;
+  border: 1px black solid;
+  background-color: white;
+  z-index: 990;
+}
+
+.partMenu>.header {
+  padding-top: 7px;
+  height: 28px;
+  background-color: black;
+  cursor: move;
+}
+
+.partMenu>.header>label {
+  color: white;
+  font: 14px;
+  font-family: sans-serif;
+  margin: 4px 0px 0px 10px;
+}
+
+.partMenu>.content {
+  width: 500px;
+  height: 170px;
+  margin: 4px 0px 8px 0px;
+}
+
+.content>.objectSelect {
+  width: inherit;
+  height: 130px;
+  margin: 1px 0px 8px 0px;
+  display: flex;
+}
+
+.content>.objectSelect>.item {
+  width: 240px;
+  height: inherit;
+  margin: 0px 5px;
+  display: block;
+}
+
+.content>.relationSelect {
+  width: 490px;
+  height: 46px;
+  margin: 0px 5px;
+  display: flex;
+  border-top: 2px solid darkgray;
+}
+
+.content>.relationSelect>.relationInput {
+  width: 250px;height: inherit;margin-left: 6px;
+}
+
+
+.partMenu>.footer {
+  height: 44px;
+  width: inherit;
+}
+
+.objectSelect>.item {
+  background-color: #d3d3d3;
+  padding: 0px 2px;
+}
+
+.objectSelect>.item>label {
+  font-family: sans-serif;
+  font-weight: 700;
+}
+.selectItem {
+  width: 236px;
+  height: 35px;
+  margin: 1px 1px;
+  padding: 1px 0px;
+  display: flex;
+}
+.selectItem>label {
+  font-family: consolas;
+  font: 10px;
+  width: 80px;
+  height: 25px;
+  padding-top: 10px;
+}
+
+.selectItem>select {
+  width: 160px;
+  height: 29px;
+  margin: 4px 0px;
+}
+.partMenu .footer button {
+  margin: 20px 30px;
+  height: 28px;
+  width: 100px;
+}
+
+/*  Elements selections CSS S */
+.elementsSelection {
+  z-index: 991;
+}
+
+.elementsSelection>input {
+  width:50px; height: 27px; margin: 6px 3px;
+}
+
+.divUlOutter {
+  display: none;
+}
+
+.divUlOutter {
+  margin-top: 5px;
+  background-color: whitesmoke;
+  width: 160px;
+  height: 200px;
+  overflow-y: scroll;
+}
+.divUlElements {
+  background-color: whitesmoke;
+  width: 660px;
+  height: 600px;
+}
+
+  /* Second level <ul> */
+.divUlElements>ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;  
+}
+
+.divUlElements>ul li {
+  color: black;
+}
+
+  /* Third level <ul> */
+.divUlElements>ul>li>div {
+  margin-left: 12px;
+}
+
+.divUlElements>ul>li>div ul{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+.divUlElements>ul>li>div li{
+  font: 9px bold black;
+}
+
+
+/*///////////////// Selection buttons CSS /////////////////*/
+.inputButtons {
+  margin-top: 7px;
+}
+
+.inputButtons>div {
+  display: flex;
+  font-size: 8px;
+}
+
+.inputButtons > .btns_selection {
+  background-color: white;
+  display: none;
+}
+
+.inputButtons > .btns_selection > button{
+  min-width: 40px;
+  height: 21px;
+  font-size: 9px;
+}
+
+.inputButtons .extSelection {
+  font: 9px normal black;
+  float: right;
+}
+/*  Elements selections CSS E */
+
+/****************** 一致性分析 关联设置 E *****************/
+/*############### 弹窗样式设置 End ###############*/
+
